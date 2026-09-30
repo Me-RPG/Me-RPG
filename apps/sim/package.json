@@ -1,0 +1,11 @@
+{
+  "name": "@healthrpg/sim",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@healthrpg/content": "*",
+    "@healthrpg/engine": "*",
+    "@healthrpg/fitness-model": "*"
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "version": "0.1.0-unreviewed",
+  "topic": "R2 rest and recovery norms",
+  "generated": "2026-09-28",
+  "notes": "Every numeric value is {low, mid, high, sources}. Source IDs map to the citation list in report.md. 'confidence' is high/medium/low as defined in the report. Values tagged low are design interpolations, not evidence.",
+  "source_index": {
+    "S1": "Ratamess et al. 2009 ACSM progression models, doi:10.1249/MSS.0b013e3181915670",
+    "S2": "Esco 2013 ACSM brochure Resistance Training for Health and Fitness",
+    "S3": "Phillips et al. 2026 ACSM position stand, doi:10.1249/MSS.0000000000003897",
+    "S4": "Bull et al. 2020 WHO guidelines, doi:10.1136/bjsports-2020-102955",
+    "S5": "Garber et al. 2011 ACSM position stand, doi:10.1249/MSS.0b013e318213fefb",
+    "S6": "Meeusen et al. 2013 ECSS/ACSM overtraining consensus, doi:10.1249/MSS.0b013e318279a10a",
+    "S7": "Secondary citation of ACSM 48 h rule, PMC11806282",
+    "S8": "NSCA Essentials of Personal Training (via NSCA Kinetic Select)",
+    "S9": "Moran-Navarro et al. 2017, doi:10.1007/s00421-017-3725-7",
+    "S10": "Schoenfeld, Ogborn, Krieger 2016, doi:10.1007/s40279-016-0543-8",
+    "S11": "Maeo et al. 2017 downhill walking, doi:10.1371/journal.pone.0173909",
+    "S12": "Spiering et al. 2021 minimal dose, doi:10.1519/JSC.0000000000003964",
+    "S13": "Bickel, Cross, Bamman 2011, doi:10.1249/MSS.0b013e318207c15d",
+    "S14": "Bosquet et al. 2013 training cessation meta-analysis, doi:10.1111/sms.12047",
+    "S15": "Kellmann et al. 2018 recovery consensus, doi:10.1123/ijspp.2017-0759",
+    "S16": "Bell et al. 2023 deload Delphi, doi:10.1186/s40798-023-00633-0",
+    "S17": "Rogerson/Bell et al. 2024 deload survey, doi:10.1186/s40798-024-00691-y",
+    "S18": "Bell et al. 2025 practical deloading, doi:10.1519/SSC.0000000000000910",
+    "S19": "Coleman et al. 2024 deload RCT, doi:10.7717/peerj.16777",
+    "S20": "Bosquet et al. 2007 tapering meta-analysis, MSSE 39(8):1358-1365",
+    "S21": "Martinez-Navarro et al. 2021 week after marathon, doi:10.1080/17461391.2020.1857441",
+    "S22": "de Sousa et al. 2021 marathon cytokines, doi:10.3389/fphys.2021.752144",
+    "S23": "Foster 1998 monotony/strain, MSSE 30(7):1164-1168",
+    "S24": "Nielsen et al. 2014 running progression, doi:10.2519/jospt.2014.5164",
+    "S25": "Impellizzeri et al. 2020 ACWR pitfalls, IJSPP 15(6):907-913",
+    "S26": "Watson et al. 2015 AASM/SRS sleep, doi:10.5664/jcsm.4758",
+    "S27": "Walsh et al. 2021 sleep and the athlete, doi:10.1136/bjsports-2020-102025",
+    "S28": "Dupuy et al. 2018 recovery techniques meta-analysis, doi:10.3389/fphys.2018.00403",
+    "S29": "Mujika & Padilla 2000 detraining part I, doi:10.2165/00007256-200030020-00002"
+  },
+
+  "training_days_per_week": {
+    "_desc": "Recommended training sessions per week by level and modality.",
+    "strength": {
+      "beginner":     {"low": 2, "mid": 3, "high": 3, "sources": ["S1", "S2"], "confidence": "high"},
+      "intermediate": {"low": 3, "mid": 3.5, "high": 4, "sources": ["S1", "S2"], "confidence": "high"},
+      "advanced":     {"low": 4, "mid": 5, "high": 6, "sources": ["S1", "S2"], "confidence": "medium"}
+    },
+    "endurance_health": {
+      "moderate_intensity_days": {"low": 5, "mid": 5, "high": 7, "sources": ["S5"], "confidence": "high"},
+      "vigorous_intensity_days": {"low": 3, "mid": 3, "high": 5, "sources": ["S5"], "confidence": "high"}
+    }
+  },
+
+  "rest_days_per_week": {
+    "_desc": "Non-training days per week that are normal and healthy. The engine treats up to 'high' as protected (no decay).",
+    "strength": {
+      "beginner":     {"low": 4, "mid": 4, "high": 5, "sources": ["S1", "S2", "S4"], "confidence": "high"},
+      "intermediate": {"low": 3, "mid": 3.5, "high": 4, "sources": ["S1", "S2"], "confidence": "high"},
+      "advanced":     {"low": 1, "mid": 2, "high": 3, "sources": ["S1", "S2", "S6"], "confidence": "medium"}
+    },
+    "endurance": {
+      "beginner":     {"low": 2, "mid": 3, "high": 4, "sources": ["S4", "S5"], "confidence": "medium"},
+      "intermediate": {"low": 2, "mid": 2, "high": 3, "sources": ["S5", "S6"], "confidence": "medium"},
+      "advanced":     {"low": 1, "mid": 1, "high": 2, "sources": ["S6"], "confidence": "medium"}
+    },
+    "mixed": {
+      "beginner":     {"low": 3, "mid": 3, "high": 4, "sources": ["S1", "S4", "S5"], "confidence": "low"},
+      "intermediate": {"low": 2, "mid": 2, "high": 3, "sources": ["S1", "S5", "S6"], "confidence": "low"},
+      "advanced":     {"low": 1, "mid": 1, "high": 2, "sources": ["S1", "S6"], "confidence": "low"}
+    },
+    "minimum_full_rest_days_recommended": {"low": 1, "mid": 1, "high": 2, "sources": ["S6"], "confidence": "high"}
+  },
+
+  "protected_rest_days_per_week": {
+    "_desc": "Engine rule: rest days within a rolling 7-day window that never trigger decay.",
+    "beginner":     {"low": 4, "mid": 5, "high": 5, "sources": ["S1", "S4"], "confidence": "medium"},
+    "intermediate": {"low": 3, "mid": 4, "high": 4, "sources": ["S1"], "confidence": "medium"},
+    "advanced":     {"low": 2, "mid": 3, "high": 3, "sources": ["S1", "S6"], "confidence": "low"}
+  },
+
+  "muscle_group_recovery_hours": {
+    "default": {"low": 24, "mid": 48, "high": 72, "sources": ["S5", "S7", "S8", "S9"], "confidence": "high"},
+    "modifiers": {
+      "failure_or_high_volume_mult": {"low": 1.25, "mid": 1.5, "high": 1.5, "sources": ["S9"], "confidence": "medium"},
+      "novel_or_eccentric_mult":     {"low": 1.25, "mid": 1.25, "high": 1.5, "sources": ["S11"], "confidence": "low"},
+      "age_60_plus_mult":            {"low": 1.0, "mid": 1.25, "high": 1.5, "sources": ["S13", "S14"], "confidence": "low"},
+      "light_nonfailure_mult":       {"low": 0.5, "mid": 0.5, "high": 0.75, "sources": ["S9"], "confidence": "low"},
+      "high_volume_threshold_hard_sets": {"low": 5, "mid": 6, "high": 8, "sources": [], "confidence": "low"},
+      "light_session_min_rir":       {"low": 3, "mid": 3, "high": 4, "sources": ["S9", "S18"], "confidence": "low"}
+    },
+    "min_sessions_per_muscle_per_week_for_growth": {"low": 2, "mid": 2, "high": 3, "sources": ["S3", "S10"], "confidence": "high"}
+  },
+
+  "deload_every_weeks": {"low": 4, "mid": 6, "high": 8, "sources": ["S16", "S17", "S18"], "confidence": "medium"},
+  "deload_duration_days": {"low": 5, "mid": 7, "high": 7, "sources": ["S17", "S18"], "confidence": "medium"},
+  "deload_volume_frac": {
+    "_desc": "Fraction of normal (previous block) weekly volume retained during a deload. 1 - reduction.",
+    "default":             {"low": 0.40, "mid": 0.55, "high": 0.75, "sources": ["S18"], "confidence": "medium"},
+    "low_recovery_need":   {"low": 0.55, "mid": 0.65, "high": 0.75, "sources": ["S18"], "confidence": "medium"},
+    "moderate_recovery_need": {"low": 0.40, "mid": 0.50, "high": 0.60, "sources": ["S18"], "confidence": "medium"},
+    "high_recovery_need":  {"low": 0.10, "mid": 0.25, "high": 0.40, "sources": ["S18"], "confidence": "medium"}
+  },
+  "deload_intensity_load_reduction_frac": {"low": 0.0, "mid": 0.10, "high": 0.10, "sources": ["S18"], "confidence": "medium"},
+  "deload_rir_increase": {"low": 1, "mid": 2, "high": 3, "sources": ["S18"], "confidence": "medium"},
+  "deload_frequency_frac_retained": {"low": 0.75, "mid": 1.0, "high": 1.0, "sources": ["S17", "S18"], "confidence": "medium"},
+  "deload_min_consistent_weeks_before_prompt": {"low": 3, "mid": 4, "high": 6, "sources": [], "confidence": "low"},
+  "deload_beginner_exempt_weeks": {"low": 6, "mid": 8, "high": 12, "sources": [], "confidence": "low"},
+  "endurance_taper": {
+    "duration_days":   {"low": 8, "mid": 14, "high": 14, "sources": ["S20"], "confidence": "high"},
+    "volume_frac":     {"low": 0.40, "mid": 0.50, "high": 0.59, "sources": ["S20"], "confidence": "high"}
+  },
+
+  "endurance_recovery_hours_by_tier": {
+    "_desc": "No-penalty 'Recovering' window after a single endurance effort. Interpolated; no guideline prescribes this directly.",
+    "light":     {"low": 0,  "mid": 12, "high": 24, "sources": ["S6"], "confidence": "low", "definition": "<60 min easy"},
+    "moderate":  {"low": 24, "mid": 36, "high": 48, "sources": ["S9", "S11"], "confidence": "low", "definition": "60-120 min steady or hilly 2-3 h hike"},
+    "hard_long": {"low": 48, "mid": 60, "high": 72, "sources": ["S11", "S22"], "confidence": "low", "definition": "2-4 h run or 4-6 h hike with major descent"},
+    "extreme":   {"low": 72, "mid": 72, "high": 96, "sources": ["S21", "S22"], "confidence": "low", "definition": "marathon, ultra, >6 h or multi-day trek"},
+    "extreme_reduced_load_days": {"low": 7, "mid": 7, "high": 14, "sources": ["S6", "S21"], "confidence": "low"},
+    "easy_activity_ok_after_hours_extreme": {"low": 48, "mid": 48, "high": 72, "sources": ["S21"], "confidence": "medium"},
+    "descent_heavy_tier_bump": {"low": 1, "mid": 1, "high": 1, "sources": ["S11"], "confidence": "low"},
+    "novel_effort_mult": {"low": 1.25, "mid": 1.25, "high": 1.5, "sources": ["S11"], "confidence": "low"},
+    "age_60_plus_mult": {"low": 1.0, "mid": 1.25, "high": 1.5, "sources": ["S14"], "confidence": "low"}
+  },
+
+  "maintenance_dose": {
+    "_desc": "Minimum weekly dose that counts as MAINTAINED (no decay) for each capacity, assuming intensity is kept near normal.",
+    "strength": {
+      "sessions_per_week_young":   {"low": 1, "mid": 1, "high": 2, "sources": ["S1", "S12", "S13"], "confidence": "high"},
+      "sets_per_exercise_young":   {"low": 1, "mid": 1, "high": 3, "sources": ["S12", "S13"], "confidence": "high"},
+      "sessions_per_week_older":   {"low": 1, "mid": 2, "high": 2, "sources": ["S12", "S13"], "confidence": "medium"},
+      "sets_per_exercise_older":   {"low": 2, "mid": 2, "high": 3, "sources": ["S12"], "confidence": "medium"},
+      "volume_frac_of_build_young": {"low": 0.11, "mid": 0.33, "high": 0.33, "sources": ["S13"], "confidence": "high"},
+      "load_within_frac_of_normal": {"low": 0.85, "mid": 0.90, "high": 1.0, "sources": ["S12"], "confidence": "low"},
+      "maintained_up_to_weeks":    {"low": 12, "mid": 32, "high": 32, "sources": ["S12", "S13"], "confidence": "high"}
+    },
+    "hypertrophy": {
+      "sessions_per_week_young":   {"low": 1, "mid": 1, "high": 2, "sources": ["S12", "S13"], "confidence": "high"},
+      "volume_frac_of_build_young": {"low": 0.11, "mid": 0.33, "high": 0.33, "sources": ["S13"], "confidence": "high"},
+      "sessions_per_week_older":   {"low": 2, "mid": 2, "high": 2, "sources": ["S12"], "confidence": "medium"},
+      "sets_per_exercise_older":   {"low": 2, "mid": 3, "high": 3, "sources": ["S12"], "confidence": "medium"}
+    },
+    "aerobic_endurance": {
+      "sessions_per_week":         {"low": 2, "mid": 2, "high": 3, "sources": ["S12"], "confidence": "high"},
+      "volume_frac_of_normal":     {"low": 0.34, "mid": 0.50, "high": 0.67, "sources": ["S12"], "confidence": "high"},
+      "min_minutes_per_session":   {"low": 13, "mid": 20, "high": 26, "sources": ["S12"], "confidence": "high"},
+      "intensity_frac_of_normal":  {"low": 0.95, "mid": 1.0, "high": 1.0, "sources": ["S12"], "confidence": "high"},
+      "maintained_up_to_weeks":    {"low": 5, "mid": 15, "high": 15, "sources": ["S12"], "confidence": "high"},
+      "trained_athlete_max_frequency_cut_frac": {"low": 0.2, "mid": 0.2, "high": 0.2, "sources": ["S12"], "confidence": "medium"}
+    },
+    "general_health": {
+      "moderate_minutes_per_week": {"low": 150, "mid": 150, "high": 300, "sources": ["S4", "S5"], "confidence": "high"},
+      "vigorous_minutes_per_week": {"low": 75, "mid": 75, "high": 150, "sources": ["S4", "S5"], "confidence": "high"},
+      "strength_days_per_week":    {"low": 2, "mid": 2, "high": 3, "sources": ["S3", "S4"], "confidence": "high"}
+    }
+  },
+
+  "decay_grace_days": {
+    "_desc": "Days below maintenance before any decay begins. Detraining evidence shows strength is largely retained up to ~4 weeks of full inactivity; VO2max declines sooner in trained athletes.",
+    "strength":    {"low": 14, "mid": 14, "high": 28, "sources": ["S13", "S14", "S29"], "confidence": "medium"},
+    "hypertrophy": {"low": 14, "mid": 14, "high": 21, "sources": ["S13", "S29"], "confidence": "low"},
+    "aerobic":     {"low": 7,  "mid": 10, "high": 14, "sources": ["S29"], "confidence": "low"},
+    "user_declared_pause_max_days": {"low": 7, "mid": 14, "high": 28, "sources": ["S6", "S29"], "confidence": "low"}
+  },
+
+  "overreaching_recovery_days": {
+    "functional_overreaching": {"low": 2, "mid": 7, "high": 14, "sources": ["S6"], "confidence": "high"},
+    "nonfunctional_overreaching": {"low": 14, "mid": 42, "high": 120, "sources": ["S6"], "confidence": "medium"}
+  },
+
+  "overreaching_signals": [
+    {
+      "id": "performance_decline_despite_rest",
+      "description": "Performance at matched effort drops (e1RM/reps at a given load, or pace at the same logged RPE) across >=2 sessions over >=7 days and does not rebound after >=2 rest days. Under 2 weeks = FOR-like; 2 weeks or more = NFOR-like, so suggest a deload.",
+      "strength_drop_frac": {"low": 0.03, "mid": 0.05, "high": 0.10, "sources": ["S6"], "confidence": "low"},
+      "pace_drop_frac":     {"low": 0.03, "mid": 0.04, "high": 0.05, "sources": ["S6"], "confidence": "low"},
+      "window_days":        {"low": 7, "mid": 10, "high": 14, "sources": ["S6"], "confidence": "low"},
+      "escalate_after_days": {"low": 14, "mid": 14, "high": 21, "sources": ["S6"], "confidence": "medium"}
+    },
+    {
+      "id": "rpe_creep",
+      "description": "Logged session RPE for a repeated identical workout rises by at least the threshold over consecutive exposures.",
+      "rpe_increase_points": {"low": 1, "mid": 1, "high": 2, "sources": ["S6", "S23"], "confidence": "low"},
+      "consecutive_exposures": {"low": 2, "mid": 2, "high": 3, "sources": [], "confidence": "low"}
+    },
+    {
+      "id": "weekly_load_spike",
+      "description": "Weekly load (sRPE x minutes, or distance) exceeds the prior 2-week average by more than the threshold. Informational only; do not use ACWR as a hard rule.",
+      "increase_frac": {"low": 0.10, "mid": 0.30, "high": 0.30, "sources": ["S24", "S25"], "confidence": "medium"}
+    },
+    {
+      "id": "high_monotony",
+      "description": "Foster monotony (7-day mean daily load / SD) above the threshold: little variation, no easy days.",
+      "monotony_threshold": {"low": 1.5, "mid": 2.0, "high": 2.5, "sources": ["S23", "S6"], "confidence": "low"}
+    },
+    {
+      "id": "no_rest_day",
+      "description": "Consecutive days of moderate-or-harder sessions with no rest or light day.",
+      "consecutive_days": {"low": 7, "mid": 7, "high": 10, "sources": ["S6"], "confidence": "high"}
+    },
+    {
+      "id": "failed_or_truncated_sessions",
+      "description": "Planned sessions abandoned or cut short within a 7-day window.",
+      "count_in_7_days": {"low": 2, "mid": 2, "high": 3, "sources": ["S6"], "confidence": "low"}
+    },
+    {
+      "id": "muscle_group_overlap",
+      "description": "Same muscle group trained hard again inside its recovery window.",
+      "occurrences_in_14_days": {"low": 2, "mid": 3, "high": 4, "sources": ["S7", "S9"], "confidence": "low"}
+    }
+  ],
+  "overreaching_policy": {
+    "signals_for_gentle_nudge": {"low": 1, "mid": 1, "high": 1, "sources": ["S6"], "confidence": "low"},
+    "signals_for_deload_offer": {"low": 2, "mid": 2, "high": 3, "sources": ["S6", "S18"], "confidence": "low"},
+    "never_penalize": true,
+    "never_label_overtrained": true
+  },
+
+  "sleep": {
+    "adult_recommended_hours": {"low": 7, "mid": 8, "high": 9, "sources": ["S26", "S27"], "confidence": "high"},
+    "beneficial_nap_max_minutes": {"low": 20, "mid": 30, "high": 30, "sources": ["S27"], "confidence": "medium"},
+    "tracking_required": false,
+    "self_report_optional": true
+  },
+
+  "active_recovery": {
+    "max_rpe_0_10": {"low": 3, "mid": 4, "high": 4, "sources": ["S15", "S21"], "confidence": "low"},
+    "max_minutes":  {"low": 30, "mid": 45, "high": 60, "sources": ["S21"], "confidence": "low"}
+  },
+
+  "well_rested_buff": {
+    "_desc": "Granted when ANY condition is met. Missing sleep input never removes eligibility.",
+    "conditions": [
+      "rest_or_active_recovery_day_after_consecutive_training_days",
+      "rest_or_active_recovery_day_after_hard_session",
+      "completed_deload_week",
+      "self_reported_good_sleep_nights"
+    ],
+    "consecutive_training_days_trigger": {"low": 2, "mid": 3, "high": 4, "sources": ["S6"], "confidence": "low"},
+    "hard_session_rpe_threshold": {"low": 7, "mid": 7, "high": 8, "sources": [], "confidence": "low"},
+    "good_sleep_hours": {"low": 7, "mid": 7, "high": 9, "sources": ["S26"], "confidence": "high"},
+    "good_sleep_nights_of_last_4": {"low": 3, "mid": 3, "high": 4, "sources": [], "confidence": "low"},
+    "xp_bonus_frac": {"low": 0.05, "mid": 0.10, "high": 0.15, "sources": [], "confidence": "low"},
+    "duration_hours": {"low": 48, "mid": 72, "high": 72, "sources": [], "confidence": "low"},
+    "max_stacks": {"low": 1, "mid": 1, "high": 1, "sources": [], "confidence": "low"}
+  }
+}

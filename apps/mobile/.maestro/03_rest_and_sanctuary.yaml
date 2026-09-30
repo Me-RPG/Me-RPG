@@ -1,0 +1,13 @@
+# Camp: rest, enter and leave the Sanctuary.
+appId: com.healthrpg.app
+---
+- launchApp
+- tapOn: "Camp"
+- tapOn:
+    id: "rest"
+- tapOn:
+    id: "enter-sanctuary"
+- assertVisible: "Leave the Sanctuary"
+- tapOn:
+    id: "leave-sanctuary"
+- assertVisible: "Enter the Sanctuary"

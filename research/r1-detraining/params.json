@@ -1,0 +1,110 @@
+{
+  "version": "0.1.0-unreviewed",
+  "model_equation": "G(t) = G0 * (floor + (1 - floor) * exp(-max(0, t - grace_days) / tau_days)); t = consecutive days below maintenance dose; G = training-induced gain above untrained baseline (baseline never decays). Retraining: regain rate toward previous peak = normal gain rate * retraining_multiplier; normal rate above previous peak.",
+  "units": {
+    "grace_days": "days of consecutive below-maintenance activity before any decay",
+    "tau_days": "exponential time constant (days) of decay toward floor after grace",
+    "pct_loss_by_week": "percent of training-induced gain lost after N weeks of full inactivity; low = slow-decay scenario, mid = mid parameters, high = fast-decay scenario",
+    "retained_floor_frac": "fraction of gain kept at long-term plateau",
+    "retraining_multiplier": "multiplier on normal gain rate while below previous peak",
+    "age_modifiers": "multipliers applied to tau_days (and retraining_multiplier where given) by age band"
+  },
+  "maintenance_dose": {
+    "aerobic_sessions_per_week": {"low": 1, "mid": 2, "high": 3, "sources": ["Spiering 2021 doi:10.1519/JSC.0000000000003964"]},
+    "strength_sessions_per_week": {"low": 1, "mid": 1, "high": 2, "sources": ["Spiering 2021 doi:10.1519/JSC.0000000000003964"]},
+    "muscular_endurance_sessions_per_week": {"low": 1, "mid": 2, "high": 3, "sources": ["Spiering 2021 doi:10.1519/JSC.0000000000003964 (extrapolated)"]},
+    "mobility_sessions_per_week": {"low": 2, "mid": 3, "high": 5, "sources": ["extrapolation; Willy 2001 doi:10.2519/jospt.2001.31.3.138 used 5/wk to build gains"]}
+  },
+  "capacities": {
+    "aerobic": {
+      "confidence": "medium-high",
+      "grace_days": {"low": 4, "mid": 7, "high": 10, "sources": ["Coyle 1984 doi:10.1152/jappl.1984.57.6.1857", "Frontiers 2023 review doi:10.3389/fphys.2023.1334766 (Houmard 1992: -4.7% at 14 d)"]},
+      "decay_model": "grace_then_exponential_to_floor",
+      "tau_days": {"low": 14, "mid": 21, "high": 35, "sources": ["Coyle 1984 doi:10.1152/jappl.1984.57.6.1857 (fit: -7% at 12 d, plateau -16% by 56 d)", "Zheng 2022 doi:10.1155/2022/2130993 (no further change beyond ~30 d)"]},
+      "pct_loss_by_week": {
+        "1": {"low": 0, "mid": 0, "high": 19, "sources": ["derived from grace/tau/floor"]},
+        "2": {"low": 7, "mid": 24, "high": 51, "sources": ["derived; cf. Houmard 1992, Coyle 1984"]},
+        "4": {"low": 24, "mid": 54, "high": 82, "sources": ["derived; cf. Mujika & Padilla 2000a doi:10.2165/00007256-200030020-00002"]},
+        "8": {"low": 44, "mid": 77, "high": 98, "sources": ["derived; cf. Coyle 1984, Mujika & Padilla 2000b doi:10.2165/00007256-200030030-00001"]},
+        "12": {"low": 53, "mid": 83, "high": 100, "sources": ["derived; cf. Coyle 1984 plateau"]}
+      },
+      "retained_floor_frac": {"low": 0.0, "mid": 0.15, "high": 0.4, "sources": ["Mujika & Padilla 2000b doi:10.2165/00007256-200030030-00001 (recent gains fully lost; athletes stay above controls)", "Coyle 1984 doi:10.1152/jappl.1984.57.6.1857 (~40% of advantage over controls kept at 84 d)"]},
+      "retraining_multiplier": {"low": 1.0, "mid": 1.5, "high": 2.0, "sources": ["low-confidence estimate; Girardi 2020 doi:10.3389/fphys.2020.588784 (bed-rest recovery few days to 55 d)"]},
+      "age_modifiers": {
+        "under_20": {"tau_multiplier": {"low": 0.7, "mid": 0.85, "high": 1.0, "sources": ["Zheng 2022 doi:10.1155/2022/2130993 (<20 y lost more long-term)"]}},
+        "20_to_64": {"tau_multiplier": {"low": 1.0, "mid": 1.0, "high": 1.0, "sources": ["reference band"]}},
+        "65_plus": {"tau_multiplier": {"low": 0.8, "mid": 1.0, "high": 1.2, "sources": ["no direct data found; neutral default"]}}
+      },
+      "training_age_modifiers": {
+        "floor_increment_per_training_year": {"low": 0.05, "mid": 0.1, "high": 0.15, "sources": ["design choice anchored to Mujika & Padilla 2000b and Coyle 1984; cap at retained_floor_frac.high"]}
+      }
+    },
+    "muscular_strength": {
+      "confidence": "medium",
+      "notes": "Hypertrophy (muscle size) decays faster than strength: size returns to ~baseline by ~20 wk in novices (Psilander 2019). If the engine later splits size from neural strength, use tau ~60 d, floor ~0 for size.",
+      "grace_days": {"low": 14, "mid": 21, "high": 28, "sources": ["Mujika & Padilla 2000a doi:10.2165/00007256-200030020-00002 (retained up to 4 wk)", "Bosquet 2013 doi:10.1111/sms.12047 (significant after ~3 wk)", "McMaster 2013 doi:10.1007/s40279-013-0031-3 (maintained ~3 wk)", "Ogasawara 2013 doi:10.1007/s00421-012-2511-9 (no loss after 3 wk)"]},
+      "decay_model": "grace_then_exponential_to_floor",
+      "tau_days": {"low": 60, "mid": 120, "high": 240, "sources": ["fit to Psilander 2019 doi:10.1152/japplphysiol.00917.2018 (~60% of gain kept at 20 wk)", "Lemmer 2000 MSSE 32(8):1505 (young kept ~2/3 of gain at 31 wk; old ~1/3)", "Blocquiaux 2020 PMID 32017951", "McMaster 2013 doi:10.1007/s40279-013-0031-3 (~2%/wk after 3 wk)"]},
+      "pct_loss_by_week": {
+        "1": {"low": 0, "mid": 0, "high": 0, "sources": ["grace window"]},
+        "2": {"low": 0, "mid": 0, "high": 0, "sources": ["grace window"]},
+        "4": {"low": 0, "mid": 4, "high": 19, "sources": ["derived; cf. Bosquet 2013 trivial <4 wk"]},
+        "8": {"low": 6, "mid": 18, "high": 45, "sources": ["derived; cf. Girardi 2020 (~7.5% max isometric force at 8 wk in strength-trained)"]},
+        "12": {"low": 10, "mid": 29, "high": 62, "sources": ["derived; cf. Blocquiaux 2020 (<50% of gain lost at 12 wk)"]}
+      },
+      "retained_floor_frac": {"low": 0.1, "mid": 0.3, "high": 0.5, "sources": ["Staron 1991 doi:10.1152/jappl.1991.70.2.631 (not back to pretraining after 30-32 wk)", "Psilander 2019 doi:10.1152/japplphysiol.00917.2018", "Lemmer 2000 MSSE 32(8):1505"]},
+      "retraining_multiplier": {"low": 1.0, "mid": 2.0, "high": 3.0, "sources": ["Halonen 2024 doi:10.1111/sms.14739 (pre-break level regained in 5 wk vs 10 wk)", "Staron 1991 doi:10.1152/jappl.1991.70.2.631", "Blocquiaux 2020 PMID 32017951", "Psilander 2019 doi:10.1152/japplphysiol.00917.2018 (no enhanced response; lower bound)", "Seaborne 2018 doi:10.1038/s41598-018-20287-3", "Bruusgaard 2010 doi:10.1073/pnas.0913935107 (mouse)"]},
+      "age_modifiers": {
+        "under_20": {"tau_multiplier": {"low": 0.8, "mid": 1.0, "high": 1.2, "sources": ["no direct data; neutral default"]}},
+        "20_to_64": {"tau_multiplier": {"low": 1.0, "mid": 1.0, "high": 1.0, "sources": ["reference band"]}},
+        "65_plus": {
+          "tau_multiplier": {"low": 0.5, "mid": 0.6, "high": 0.8, "sources": ["Bosquet 2013 doi:10.1111/sms.12047 (larger effect >65 y)", "Lemmer 2000 MSSE 32(8):1505 (faster decline wk 12-31)", "Grgic 2022 IJERPH 19:14048"]},
+          "retraining_multiplier_scale": {"low": 0.8, "mid": 0.9, "high": 1.0, "sources": ["Blocquiaux 2020 PMID 32017951 (rapid 1RM return in older men)"]}
+        }
+      },
+      "training_age_modifiers": {
+        "floor_increment_per_training_year": {"low": 0.03, "mid": 0.05, "high": 0.1, "sources": ["design choice; Bosquet 2013 (inactive people lose more than recreational athletes)"]}
+      }
+    },
+    "muscular_endurance": {
+      "confidence": "low-medium",
+      "grace_days": {"low": 7, "mid": 10, "high": 14, "sources": ["Frontiers 2023 review doi:10.3389/fphys.2023.1334766 (citrate synthase -5% at 6 d, -29% at 10 d)", "Chen 2022 doi:10.1080/17461391.2021.1880647"]},
+      "decay_model": "grace_then_exponential_to_floor",
+      "tau_days": {"low": 28, "mid": 42, "high": 70, "sources": ["Bosquet 2013 doi:10.1111/sms.12047 (submaximal strength SMD -0.62 > maximal force -0.46)", "Coyle 1984 doi:10.1152/jappl.1984.57.6.1857 (citrate synthase -40% at 56 d)", "Banister fitness tau ~42 d (Morton 1990 doi:10.1152/jappl.1990.69.3.1171)"]},
+      "pct_loss_by_week": {
+        "1": {"low": 0, "mid": 0, "high": 0, "sources": ["grace window"]},
+        "2": {"low": 0, "mid": 8, "high": 22, "sources": ["derived"]},
+        "4": {"low": 13, "mid": 30, "high": 53, "sources": ["derived"]},
+        "8": {"low": 32, "mid": 57, "high": 83, "sources": ["derived"]},
+        "12": {"low": 44, "mid": 70, "high": 94, "sources": ["derived"]}
+      },
+      "retained_floor_frac": {"low": 0.0, "mid": 0.15, "high": 0.3, "sources": ["inferred from oxidative enzyme reversal, Mujika & Padilla 2000b doi:10.2165/00007256-200030030-00001"]},
+      "retraining_multiplier": {"low": 1.0, "mid": 1.5, "high": 2.0, "sources": ["low-confidence estimate; no direct human data found"]},
+      "age_modifiers": {
+        "under_20": {"tau_multiplier": {"low": 0.8, "mid": 1.0, "high": 1.2, "sources": ["no direct data; neutral default"]}},
+        "20_to_64": {"tau_multiplier": {"low": 1.0, "mid": 1.0, "high": 1.0, "sources": ["reference band"]}},
+        "65_plus": {"tau_multiplier": {"low": 0.6, "mid": 0.8, "high": 1.0, "sources": ["extrapolated from Bosquet 2013 doi:10.1111/sms.12047 age moderator"]}}
+      }
+    },
+    "mobility": {
+      "confidence": "low",
+      "grace_days": {"low": 3, "mid": 7, "high": 14, "sources": ["Willy 2001 doi:10.2519/jospt.2001.31.3.138 (ROM gain not retained at 4 wk)"]},
+      "decay_model": "grace_then_exponential_to_floor",
+      "tau_days": {"low": 7, "mid": 10, "high": 21, "sources": ["fit to Willy 2001 doi:10.2519/jospt.2001.31.3.138"]},
+      "pct_loss_by_week": {
+        "1": {"low": 0, "mid": 0, "high": 44, "sources": ["derived"]},
+        "2": {"low": 0, "mid": 48, "high": 79, "sources": ["derived"]},
+        "4": {"low": 39, "mid": 83, "high": 97, "sources": ["derived; Willy 2001 ~100% lost at 4 wk"]},
+        "8": {"low": 69, "mid": 94, "high": 100, "sources": ["derived"]},
+        "12": {"low": 77, "mid": 95, "high": 100, "sources": ["derived"]}
+      },
+      "retained_floor_frac": {"low": 0.0, "mid": 0.05, "high": 0.2, "sources": ["Willy 2001 doi:10.2519/jospt.2001.31.3.138"]},
+      "retraining_multiplier": {"low": 1.0, "mid": 1.0, "high": 1.2, "sources": ["Willy 2001 doi:10.2519/jospt.2001.31.3.138 (second stretching block no faster)"]},
+      "age_modifiers": {
+        "under_20": {"tau_multiplier": {"low": 0.8, "mid": 1.0, "high": 1.2, "sources": ["no direct data; neutral default"]}},
+        "20_to_64": {"tau_multiplier": {"low": 1.0, "mid": 1.0, "high": 1.0, "sources": ["reference band"]}},
+        "65_plus": {"tau_multiplier": {"low": 0.6, "mid": 0.8, "high": 1.0, "sources": ["no direct detraining data; low-confidence extrapolation"]}}
+      }
+    }
+  }
+}

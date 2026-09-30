@@ -1,0 +1,220 @@
+{
+  "version": "0.1.0-unreviewed",
+  "notes": "Uncertain numbers are {low, mid, high, sources}. Source keys refer to the citation list in report.md. 'design' means HealthRPG heuristic, not a published value.",
+  "units": { "distance": "m or km as named", "elevation": "m", "speed": "km/h", "vo2": "mL/kg/min", "energy": "J/kg (net)", "load": "MET-min (gross)" },
+
+  "formulas": {
+    "shenandoah": {
+      "expr_imperial": "S = sqrt(2 * gain_ft * distance_mi)",
+      "expr_metric": "S = k * sqrt(gain_m * dist_km)",
+      "coefficients": { "k": 2.0192, "ft_per_m": 3.28084, "mi_per_km": 0.621371 },
+      "confidence": "high",
+      "sources": ["[1] NPS Shenandoah"]
+    },
+    "naismith": {
+      "expr": "t_h = dist_km / flat_kmh + gain_m / ascent_m_per_h",
+      "coefficients": { "flat_kmh": 5.0, "ascent_m_per_h": 600 },
+      "confidence": "high",
+      "sources": ["[2] Wikipedia Naismith's rule"]
+    },
+    "scarf_equivalence": {
+      "expr": "equiv_km = dist_km + alpha * gain_km; t_h = equiv_km / 5",
+      "coefficients": { "alpha": { "low": 7.92, "mid": 8.0, "high": 10.0, "sources": ["[3] Scarf 2007: 7.92 derived; 8 men, 10 women recommended"] } },
+      "confidence": "high"
+    },
+    "aitken": {
+      "expr": "path: 1 h / 3 mi; other terrain: 1 h / 2.5 mi; plus 1 h / 2000 ft ascent",
+      "coefficients": { "rough_terrain_speed_factor": 0.833 },
+      "confidence": "medium",
+      "sources": ["[2]"]
+    },
+    "langmuir": {
+      "expr": "t_h = dist_km/5 + gain_m/600 - (loss_gentle_m/300)*(10/60) + (loss_steep_m/300)*(10/60)",
+      "coefficients": {
+        "gentle_descent_deg": [5, 12],
+        "steep_descent_deg_gt": 12,
+        "minutes_per_300m_descent": 10,
+        "group_flat_kmh": 4.0,
+        "group_ascent_m_per_h": 450
+      },
+      "confidence": "medium",
+      "sources": ["[2] citing Langmuir 1984 Mountaincraft and Leadership"]
+    },
+    "tranter": {
+      "expr": "corrected_h = table[fitness_minutes][naismith_h]; fitness_minutes = time to climb 300 m over 800 m",
+      "table": {
+        "columns_naismith_h": [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24],
+        "15": [1, 1.5, 2, 2.75, 3.5, 4.5, 5.5, 6.75, 7.75, 10, 12.5, 14.5, 17, 19.5, 22, 24],
+        "20": [1.25, 2.25, 3.25, 4.5, 5.5, 6.7, 7.75, 8.75, 10, 12.5, 15, 17.5, 20, 23, null, null],
+        "25": [1.5, 3, 4.25, 5.5, 7, 8.5, 10, 11.5, 13.25, 15, 17.5, null, null, null, null, null],
+        "30": [2, 3.5, 5, 6.75, 8.5, 10.5, 12.5, 14.5, null, null, null, null, null, null, null, null],
+        "40": [2.75, 4.25, 5.75, 7.5, 9.5, 11.5, null, null, null, null, null, null, null, null, null, null],
+        "50": [3.25, 4.75, 6.5, 8.5, null, null, null, null, null, null, null, null, null, null, null, null]
+      },
+      "null_means": "beyond capacity for that fitness level (usable as a gate)",
+      "confidence": "medium",
+      "sources": ["[2]", "[4] secondary transcription; primary not accessed"]
+    },
+    "tobler": {
+      "expr": "v_kmh = a * exp(-b * abs(s + c)); s = dh/dx",
+      "coefficients": { "a": 6.0, "b": 3.5, "c": 0.05, "off_path_factor": 0.6, "horseback_factor": 1.25 },
+      "confidence": "high",
+      "sources": ["[5] Tobler 1993 via Wikipedia", "[6][7] validation/critique"]
+    },
+    "minetti_cw": {
+      "expr": "Cw(i) = c5*i^5 + c4*i^4 + c3*i^3 + c2*i^2 + c1*i + c0  [J/kg/m, net of resting]",
+      "coefficients": { "c5": 280.5, "c4": -58.7, "c3": -76.8, "c2": 51.9, "c1": 19.6, "c0": 2.5 },
+      "valid_gradient_range": [-0.45, 0.45],
+      "r2": 0.999,
+      "energy_equivalent_J_per_mL_O2": 20.9,
+      "eccentric_threshold_gradient": -0.15,
+      "confidence": "high",
+      "sources": ["[8] Minetti et al. 2002, read from PDF"]
+    },
+    "minetti_cr_running": {
+      "expr": "Cr(i) = 155.4 i^5 - 30.4 i^4 - 43.3 i^3 + 46.3 i^2 + 19.5 i + 3.6",
+      "coefficients": { "c5": 155.4, "c4": -30.4, "c3": -43.3, "c2": 46.3, "c1": 19.5, "c0": 3.6 },
+      "confidence": "high",
+      "sources": ["[8]"]
+    },
+    "pandolf": {
+      "expr": "M_W = 1.5*W + 2.0*(W+L)*(L/W)^2 + eta*(W+L)*(1.5*V^2 + 0.35*V*G)  [G in %, V in m/s]",
+      "santee_downhill_expr": "CF = eta*((G*(W+L)*V)/3.5 - ((W+L)*(G+6)^2)/W + (25 - V^2)); M = M - CF for G<0",
+      "terrain_eta": { "blacktop": 1.0, "dirt_road": 1.1, "light_brush": 1.2, "heavy_brush": 1.5, "swampy_bog": 1.8, "loose_sand": 2.1, "snow_15cm": 2.5, "snow_25cm": 3.3, "snow_35cm": 4.1 },
+      "confidence": "medium (Santee term: low, unverified)",
+      "sources": ["[9]"]
+    },
+    "acsm_walking": {
+      "expr": "VO2 = 3.5 + 0.1*S + 1.8*S*G  [S m/min, G fraction]; not valid downhill",
+      "coefficients": { "rest": 3.5, "horizontal": 0.1, "vertical": 1.8, "valid_speed_m_per_min": [50, 100] },
+      "confidence": "high",
+      "sources": ["[10]"]
+    },
+    "met_conversion": {
+      "expr": "net_MET_min = (net_J_per_kg / 20.9) / 3.5; gross_MET_min = net_MET_min + duration_min",
+      "coefficients": { "mL_O2_per_kg_min_per_MET": 3.5, "J_per_mL_O2": 20.9 },
+      "avg_MET_clamp": { "low": 3.3, "mid": null, "high": 9.0, "sources": ["[12] Compendium 17180 walking downhill 3.3; 17036 hill climbing 8.8; design clamp"] },
+      "compendium_reference_METs": { "17080_hiking_cross_country": 6.0, "17081_hiking_slow": 3.8, "17082_hiking_normal": 5.3, "17010_backpacking": 7.0, "17012_daypack": 7.8, "17180_walk_downhill_2_5mph": 3.3, "17036_hills_11_20pct": 8.8, "17039_hills_30_40pct": 15.5 },
+      "confidence": "high (conversion); low (clamp)",
+      "sources": ["[8]", "[11]", "[12]"]
+    }
+  },
+
+  "duration": {
+    "stop_allowance_frac": { "low": 0.10, "mid": 0.15, "high": 0.25, "sources": ["design"] },
+    "daylight_safety_factor": { "low": 1.15, "mid": 1.25, "high": 1.5, "sources": ["design"] }
+  },
+
+  "tier_thresholds": {
+    "shenandoah_bins": [
+      { "tier": 1, "name": "Easiest", "max_S": 50 },
+      { "tier": 2, "name": "Moderate", "max_S": 100 },
+      { "tier": 3, "name": "Moderately Strenuous", "max_S": 150 },
+      { "tier": 4, "name": "Strenuous", "max_S": 200 },
+      { "tier": 5, "name": "Very Strenuous", "max_S": null }
+    ],
+    "shenandoah_bins_confidence": "high [1]",
+    "steep_bump": {
+      "grade": { "low": 0.12, "mid": 0.15, "high": 0.20, "sources": ["design, motivated by [1] Dark Hollow Falls caveat; [8] eccentric threshold 0.15"] },
+      "min_length_m": 200,
+      "applies_below_tier": 4
+    },
+    "duration_floor_hours": {
+      "tier_1_max_h": { "low": 1.0, "mid": 1.5, "high": 2.0, "sources": ["design"] },
+      "tier_2_max_h": { "low": 2.5, "mid": 3.0, "high": 3.5, "sources": ["design"] },
+      "tier_3_max_h": { "low": 4.0, "mid": 5.0, "high": 5.5, "sources": ["design"] },
+      "tier_4_max_h": { "low": 6.5, "mid": 7.0, "high": 8.0, "sources": ["design"] }
+    }
+  },
+
+  "sac_scale_table": {
+    "hiking":                    { "sac": "T1", "time_mult": { "low": 1.0, "mid": 1.0, "high": 1.0, "sources": ["[13][14]"] }, "energy_mult": { "low": 1.0, "mid": 1.0, "high": 1.0, "sources": ["design"] }, "risk_level": 0, "risk_label": "low", "min_experience": "novice" },
+    "mountain_hiking":           { "sac": "T2", "time_mult": { "low": 1.05, "mid": 1.1, "high": 1.2, "sources": ["design; [2] Aitken 0.83 rough-terrain bound"] }, "energy_mult": { "low": 1.0, "mid": 1.05, "high": 1.1, "sources": ["design"] }, "risk_level": 1, "risk_label": "moderate-low", "min_experience": "beginner" },
+    "demanding_mountain_hiking": { "sac": "T3", "time_mult": { "low": 1.15, "mid": 1.25, "high": 1.4, "sources": ["design; [2] Aitken"] }, "energy_mult": { "low": 1.05, "mid": 1.1, "high": 1.2, "sources": ["design"] }, "risk_level": 2, "risk_label": "elevated", "min_experience": "intermediate" },
+    "alpine_hiking":             { "sac": "T4", "time_mult": { "low": 1.3, "mid": 1.5, "high": 1.67, "sources": ["design; [5] Tobler off-path 0.6 => 1.67"] }, "energy_mult": { "low": 1.1, "mid": 1.2, "high": 1.3, "sources": ["design"] }, "risk_level": 3, "risk_label": "high", "min_experience": "advanced", "requires_acknowledgement": true },
+    "demanding_alpine_hiking":   { "sac": "T5", "time_mult": { "low": 1.67, "mid": 2.0, "high": 2.5, "sources": ["design"] }, "energy_mult": { "low": 1.2, "mid": 1.3, "high": 1.5, "sources": ["design"] }, "risk_level": 4, "risk_label": "very high", "min_experience": "not_offered", "reason": "requires ice axe/rope/crampon skills app cannot verify [13]" },
+    "difficult_alpine_hiking":   { "sac": "T6", "time_mult": { "low": 2.0, "mid": 2.5, "high": 3.0, "sources": ["design"] }, "energy_mult": { "low": 1.3, "mid": 1.4, "high": 1.6, "sources": ["design"] }, "risk_level": 5, "risk_label": "extreme", "min_experience": "not_offered", "reason": "UIAA II scrambling, severe exposure [13][14]" },
+    "unknown":                   { "sac": "T2?", "time_mult": { "low": 1.0, "mid": 1.1, "high": 1.2, "sources": ["design"] }, "energy_mult": { "low": 1.0, "mid": 1.05, "high": 1.1, "sources": ["design"] }, "risk_level": 1, "risk_label": "unverified", "min_experience": "beginner", "warning": "Difficulty unverified in map data" },
+    "inference_when_missing": { "highway=footway|cycleway or paved surface": "hiking", "highway=path|track untagged": "unknown", "confidence": "low" },
+    "yds_crosswalk_approx": { "class_1": ["T1", "T2"], "class_2": ["T3", "T4"], "class_3": ["T5"], "class_4": ["T6"], "class_5": "beyond_hiking_scale_never_offer", "confidence": "low (not an official concordance)", "sources": ["[13][15] design"] }
+  },
+
+  "trail_visibility_table": {
+    "excellent":    { "speed": 1.0,  "risk_level": 0, "min_experience": "novice" },
+    "good":         { "speed": 1.0,  "risk_level": 0, "min_experience": "novice" },
+    "intermediate": { "speed": 0.95, "risk_level": 1, "min_experience": "intermediate" },
+    "bad":          { "speed": 0.8,  "risk_level": 2, "min_experience": "advanced" },
+    "horrible":     { "speed": 0.6,  "risk_level": 4, "min_experience": "not_offered" },
+    "no":           { "speed": 0.6,  "risk_level": 5, "min_experience": "not_offered" },
+    "unknown":      { "speed": 1.0,  "risk_level": 0, "min_experience": "novice" },
+    "confidence": "definitions high [14]; speed/experience mapping low (design; 0.6 from Tobler off-path [5])"
+  },
+
+  "surface_multipliers": {
+    "asphalt":       { "energy_eta": { "low": 1.0,  "mid": 1.0,  "high": 1.0,  "sources": ["[9] blacktop"] }, "speed": 1.0 },
+    "concrete":      { "energy_eta": { "low": 1.0,  "mid": 1.0,  "high": 1.0,  "sources": ["[9] blacktop"] }, "speed": 1.0 },
+    "paving_stones": { "energy_eta": { "low": 1.0,  "mid": 1.0,  "high": 1.05, "sources": ["[9] design"] }, "speed": 1.0 },
+    "sett":          { "energy_eta": { "low": 1.0,  "mid": 1.05, "high": 1.1,  "sources": ["design"] }, "speed": 1.0 },
+    "wood":          { "energy_eta": { "low": 1.0,  "mid": 1.0,  "high": 1.05, "sources": ["design"] }, "speed": 1.0 },
+    "compacted":     { "energy_eta": { "low": 1.0,  "mid": 1.05, "high": 1.1,  "sources": ["[9] dirt road 1.1"] }, "speed": 1.0 },
+    "fine_gravel":   { "energy_eta": { "low": 1.0,  "mid": 1.05, "high": 1.1,  "sources": ["[9] dirt road 1.1"] }, "speed": 1.0 },
+    "woodchips":     { "energy_eta": { "low": 1.05, "mid": 1.1,  "high": 1.15, "sources": ["design"] }, "speed": 0.95 },
+    "gravel":        { "energy_eta": { "low": 1.1,  "mid": 1.15, "high": 1.2,  "sources": ["[9] dirt road–light brush"] }, "speed": 0.95 },
+    "dirt":          { "energy_eta": { "low": 1.1,  "mid": 1.1,  "high": 1.2,  "sources": ["[9] dirt road"] }, "speed": 0.95 },
+    "ground":        { "energy_eta": { "low": 1.1,  "mid": 1.15, "high": 1.2,  "sources": ["[9] dirt road–light brush"] }, "speed": 0.9 },
+    "unpaved":       { "energy_eta": { "low": 1.1,  "mid": 1.15, "high": 1.2,  "sources": ["[9] design"] }, "speed": 0.9 },
+    "grass":         { "energy_eta": { "low": 1.1,  "mid": 1.15, "high": 1.2,  "sources": ["[9] light brush 1.2; [12] 17260 grass track 4.8 MET"] }, "speed": 0.9 },
+    "pebblestone":   { "energy_eta": { "low": 1.15, "mid": 1.25, "high": 1.4,  "sources": ["design"] }, "speed": 0.85 },
+    "rock":          { "energy_eta": { "low": 1.2,  "mid": 1.3,  "high": 1.5,  "sources": ["[9] light–heavy brush analogue; design"] }, "speed": { "low": 0.6, "mid": 0.75, "high": 0.833, "sources": ["[2] Aitken 0.833; [5] Tobler 0.6"] } },
+    "mud":           { "energy_eta": { "low": 1.5,  "mid": 1.6,  "high": 1.8,  "sources": ["[9] heavy brush–swampy bog"] }, "speed": 0.75 },
+    "sand":          { "energy_eta": { "low": 1.6,  "mid": 1.8,  "high": 2.1,  "sources": ["[9] loose sand 2.1; [12] 17262 sand 4.5 MET"] }, "speed": 0.75 },
+    "snow":          { "energy_eta": { "low": 1.5,  "mid": 2.5,  "high": 4.1,  "sources": ["[9] soft snow 15–35 cm"] }, "speed": 0.6, "risk_add": 1 },
+    "ice":           { "energy_eta": { "low": 1.1,  "mid": 1.2,  "high": 1.5,  "sources": ["design"] }, "speed": 0.6, "risk_add": 2 },
+    "unknown":       { "energy_eta": { "low": 1.05, "mid": 1.1,  "high": 1.2,  "sources": ["design"] }, "speed": 0.95 },
+    "confidence": "OSM definitions high [14]; multipliers low (Pandolf eta is military load-carriage data extrapolated to hiking)"
+  },
+
+  "altitude_adjustment": {
+    "expr": "vo2max_eff = vo2max * (1 - loss_per_1000m * max(0, alt_m - onset_m) / 1000)",
+    "loss_per_1000m": { "low": 0.046, "mid": 0.063, "high": 0.10, "sources": ["[19] Wehrlin & Hallen 2006: 6.3%/1000 m, range 4.6–7.5%", "high = common '1%/100 m' heuristic (upper bound)"] },
+    "onset_m": { "low": 300, "mid": 700, "high": 1500, "sources": ["[19] decline already 300->800 m", "[20] Fulco 1998: from ~580 m", "high = common heuristic"] },
+    "use_altitude": "max_alt_m of route (conservative) or time-weighted mean altitude",
+    "performance_time_to_exhaustion_loss_per_1000m": { "low": null, "mid": 0.145, "high": null, "sources": ["[19]"] },
+    "ams_warning_m": { "low": 2500, "mid": 2500, "high": 3000, "sources": ["[21] WMS 2019: risk above 2500 m; >3000 m ascent-rate guidance"] },
+    "strong_warning_m": 3000
+  },
+
+  "capacity": {
+    "f_avg": { "low": 0.40, "mid": 0.50, "high": 0.60, "sources": ["[18] mean 41.5% VO2peak on easy trail; design"] },
+    "f_peak": { "low": 0.70, "mid": 0.75, "high": 0.85, "sources": ["[18] peak 74 ± 16% VO2peak; design"] },
+    "peak_window_m": 200,
+    "net_power_expr": "P_W_per_kg = (f * vo2max_eff - 3.5) * 20.9 / 60",
+    "confidence": "low (derived model; validate)"
+  },
+
+  "fitness_band_to_max_tier": {
+    "basis": "absolute VO2max (mL/kg/min), altitude-adjusted; band cutoffs are design values, not published norms",
+    "bands": [
+      { "band": "very_low", "vo2max_range": [0, 25],   "max_tier": { "low": 1, "mid": 1, "high": 2, "sources": ["design"] }, "max_hours": { "low": 1.0, "mid": 1.5, "high": 2.0, "sources": ["design"] } },
+      { "band": "low",      "vo2max_range": [25, 32],  "max_tier": { "low": 1, "mid": 2, "high": 2, "sources": ["design"] }, "max_hours": { "low": 2.0, "mid": 3.0, "high": 3.5, "sources": ["design"] } },
+      { "band": "moderate", "vo2max_range": [32, 40],  "max_tier": { "low": 2, "mid": 3, "high": 3, "sources": ["design"] }, "max_hours": { "low": 3.5, "mid": 5.0, "high": 6.0, "sources": ["design"] } },
+      { "band": "good",     "vo2max_range": [40, 48],  "max_tier": { "low": 3, "mid": 4, "high": 4, "sources": ["design"] }, "max_hours": { "low": 5.0, "mid": 7.0, "high": 8.0, "sources": ["design"] } },
+      { "band": "high",     "vo2max_range": [48, 100], "max_tier": { "low": 4, "mid": 5, "high": 5, "sources": ["design"] }, "max_hours": { "low": 7.0, "mid": 10.0, "high": 12.0, "sources": ["design"] } }
+    ],
+    "tranter_crosswalk_approx": { "15": "high", "20": "good", "25": "moderate", "30": "low", "40": "very_low", "50": "very_low", "confidence": "low (derived via Minetti power model)" },
+    "progression_rule": "tiers 4-5 additionally require >=1 completed Journey at tier-1",
+    "cv_risk_modifier": "if self-reported cardiovascular risk: use f_peak.low and cap max_tier at mid-1 for tiers >=3 pending clinician clearance [18]"
+  },
+
+  "experience_gating": {
+    "levels": ["novice", "beginner", "intermediate", "advanced"],
+    "max_sac": { "novice": "hiking", "beginner": "mountain_hiking", "intermediate": "demanding_mountain_hiking", "advanced": "alpine_hiking" },
+    "never_offer": ["demanding_alpine_hiking", "difficult_alpine_hiking", "yds_class_4", "yds_class_5", "trail_visibility=horrible", "trail_visibility=no"],
+    "season_risk_add": { "snow_or_ice_present": 1, "thunderstorm_forecast": 1, "heavy_rain": 1 },
+    "remoteness_warning_km_from_road": { "low": 3, "mid": 5, "high": 8, "sources": ["design"] },
+    "long_duration_warning_h": 4,
+    "disclaimer": "Estimates only. Conditions change; you are responsible for your own safety.",
+    "sources": ["[13] SAC", "[14] OSM", "[22] NPS Hike Smart", "[23] NPS Ten Essentials"],
+    "confidence": "low (design)"
+  }
+}

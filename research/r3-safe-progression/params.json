@@ -1,0 +1,218 @@
+{
+  "version": "0.1.0-unreviewed",
+  "topic": "R3 safe progression rates",
+  "generated": "2026-09-28",
+  "notes": "Every numeric value is {low, mid, high, sources}. 'mid' = recommended engine default; 'high' = hard ceiling (never exceed without explicit override). Source keys resolve in the 'sources' map at the bottom. Values tagged 'extrapolation' or 'heuristic' in the source list are engine-design judgments, not directly measured thresholds. Not medical advice; requires professional review.",
+
+  "weekly_volume_increase_frac": {
+    "_basis": "Fractional increase of weekly volume (distance or time) vs the mean of the previous 2 weeks.",
+    "running": {
+      "novice": {"low": 0.05, "mid": 0.10, "high": 0.20, "sources": ["buist2008", "nielsen2014", "damsted2019", "fredette2022", "videbaek2015"]},
+      "trained": {"low": 0.05, "mid": 0.10, "high": 0.20, "sources": ["damsted2019", "fredette2022", "gabbett2016", "frandsen2025"]}
+    },
+    "walking": {
+      "novice": {"low": 0.10, "mid": 0.15, "high": 0.25, "sources": ["acsm_getp8_via_chp", "hootman2001", "colbert2000"]},
+      "trained": {"low": 0.10, "mid": 0.15, "high": 0.25, "sources": ["hootman2001", "colbert2000", "extrapolation"]}
+    },
+    "hiking_distance": {
+      "novice": {"low": 0.05, "mid": 0.10, "high": 0.20, "sources": ["hootman2001", "knapik2004", "extrapolation"]},
+      "trained": {"low": 0.05, "mid": 0.10, "high": 0.20, "sources": ["knapik2004", "extrapolation"]}
+    },
+    "hiking_elevation_gain": {
+      "novice": {"low": 0.05, "mid": 0.10, "high": 0.15, "sources": ["knapik2004", "maeo2015", "extrapolation"]},
+      "trained": {"low": 0.05, "mid": 0.10, "high": 0.15, "sources": ["knapik2004", "maeo2015", "extrapolation"]}
+    },
+    "resistance_weekly_sets_per_muscle": {
+      "novice": {"low": 0.0, "mid": 0.10, "high": 0.20, "sources": ["acsm2009", "extrapolation"]},
+      "trained": {"low": 0.0, "mid": 0.10, "high": 0.20, "sources": ["acsm2009", "extrapolation"]}
+    }
+  },
+
+  "aerobic_session_duration_step_min": {
+    "_basis": "Absolute per-session duration increase allowed every 1-2 weeks during the first 4-6 weeks; also serves as the minimum step for low baselines.",
+    "value": {"low": 5, "mid": 5, "high": 10, "sources": ["acsm_getp8_via_chp"]},
+    "applies_first_weeks": {"low": 4, "mid": 5, "high": 6, "sources": ["acsm_getp8_via_chp"]}
+  },
+
+  "resistance_load_increase_frac": {
+    "_basis": "Load step when the user exceeds target reps by 1-2 on 2 consecutive sessions.",
+    "small_muscle_exercise": {"low": 0.02, "mid": 0.025, "high": 0.05, "sources": ["acsm2009"]},
+    "large_muscle_exercise": {"low": 0.05, "mid": 0.05, "high": 0.10, "sources": ["acsm2009", "acsm_getp8_via_chp"]},
+    "trigger_extra_reps_over_target": {"low": 1, "mid": 2, "high": 2, "sources": ["acsm2009"]},
+    "trigger_consecutive_sessions": {"low": 2, "mid": 2, "high": 2, "sources": ["acsm2009"]}
+  },
+
+  "single_session_spike_cap_frac": {
+    "_basis": "Max fractional excess of a single session over the longest comparable session in the last 30 days. Applies to distance/duration, to elevation gain for hikes, and to the boss battle.",
+    "running": {"low": 0.0, "mid": 0.10, "high": 0.10, "sources": ["frandsen2025"]},
+    "walking": {"low": 0.10, "mid": 0.10, "high": 0.20, "sources": ["frandsen2025", "hootman2001", "extrapolation"]},
+    "hiking_distance": {"low": 0.0, "mid": 0.10, "high": 0.15, "sources": ["frandsen2025", "extrapolation"]},
+    "hiking_elevation_gain": {"low": 0.0, "mid": 0.10, "high": 0.10, "sources": ["frandsen2025", "maeo2015", "extrapolation"]},
+    "lookback_days": {"low": 30, "mid": 30, "high": 30, "sources": ["frandsen2025"]}
+  },
+
+  "acwr_band": {
+    "_basis": "SECONDARY guardrail only; not a validated injury predictor. Compute uncoupled (acute 7 d / mean of prior 21-28 d excluding current week) on session-RPE load. Never use to justify breaking the weekly or single-session caps.",
+    "lower": {"low": 0.8, "mid": 0.8, "high": 0.8, "sources": ["gabbett2016"]},
+    "upper_target": {"low": 1.2, "mid": 1.3, "high": 1.3, "sources": ["gabbett2016", "impellizzeri2020_ijspp", "impellizzeri2021", "lolli2019"]},
+    "absolute_ceiling": {"low": 1.3, "mid": 1.5, "high": 1.5, "sources": ["gabbett2016", "hulin2014", "andrade2020"]},
+    "chronic_window_days": {"low": 21, "mid": 28, "high": 28, "sources": ["gabbett2016", "hulin2014"]}
+  },
+
+  "max_consecutive_hard_days": {
+    "novice": {"low": 1, "mid": 1, "high": 1, "sources": ["meeusen2013", "foster1998", "seiler2010"]},
+    "intermediate": {"low": 1, "mid": 1, "high": 2, "sources": ["meeusen2013", "seiler2010", "moran2017"]},
+    "advanced": {"low": 1, "mid": 1, "high": 2, "sources": ["meeusen2013", "seiler2010", "moran2017"]}
+  },
+
+  "hard_sessions_per_week_max": {
+    "novice_weeks_1_4": {"low": 0, "mid": 1, "high": 1, "sources": ["acsm_getp8_via_chp", "videbaek2015", "heuristic"]},
+    "novice_after_week_4": {"low": 1, "mid": 2, "high": 2, "sources": ["seiler2010", "heuristic"]},
+    "trained": {"low": 2, "mid": 2, "high": 3, "sources": ["seiler2010"]}
+  },
+
+  "min_rest_days_per_week": {
+    "novice": {"low": 2, "mid": 2, "high": 3, "sources": ["meeusen2013", "acsm2009", "heuristic"]},
+    "trained": {"low": 1, "mid": 1, "high": 2, "sources": ["meeusen2013"]}
+  },
+
+  "min_hours_between_hard_same_muscle_resistance": {"low": 48, "mid": 48, "high": 72, "sources": ["garber2011", "moran2017"]},
+
+  "easy_fraction_of_endurance_sessions": {"low": 0.75, "mid": 0.80, "high": 0.90, "sources": ["seiler2010"]},
+
+  "monotony_guard_max_consecutive_similar_days": {
+    "_basis": "Days in a row with session-RPE load within +/-10% of each other (engine heuristic derived from Foster's monotony concept).",
+    "value": {"low": 2, "mid": 3, "high": 3, "sources": ["foster1998", "meeusen2013", "heuristic"]}
+  },
+
+  "max_progressed_variables_per_week": {"low": 1, "mid": 1, "high": 1, "sources": ["acsm_getp8_via_chp", "heuristic"]},
+
+  "session_intensity_bands": {
+    "aerobic": {
+      "light": {
+        "pct_hrmax": {"low": 50, "mid": 57, "high": 63, "sources": ["acsm_getp8_via_chp", "garber2011"]},
+        "pct_hrr": {"low": 20, "mid": 30, "high": 39, "sources": ["acsm_getp8_via_chp"]},
+        "rpe_cr10": {"low": 2, "mid": 3, "high": 4, "sources": ["acsm_getp8_via_chp"]}
+      },
+      "moderate": {
+        "pct_hrmax": {"low": 64, "mid": 70, "high": 76, "sources": ["acsm_getp8_via_chp", "garber2011"]},
+        "pct_hrr": {"low": 40, "mid": 50, "high": 59, "sources": ["acsm_getp8_via_chp"]},
+        "rpe_cr10": {"low": 5, "mid": 5.5, "high": 6, "sources": ["acsm_getp8_via_chp"]},
+        "rpe_borg_6_20": {"low": 12, "mid": 12.5, "high": 13, "sources": ["garber2011", "kravitz2011"]}
+      },
+      "vigorous": {
+        "pct_hrmax": {"low": 77, "mid": 85, "high": 93, "sources": ["acsm_getp8_via_chp", "garber2011"]},
+        "pct_hrr": {"low": 60, "mid": 70, "high": 84, "sources": ["acsm_getp8_via_chp"]},
+        "rpe_cr10": {"low": 7, "mid": 7.5, "high": 8, "sources": ["acsm_getp8_via_chp"]},
+        "rpe_borg_6_20": {"low": 14, "mid": 15, "high": 17, "sources": ["garber2011", "kravitz2011"]}
+      }
+    },
+    "resistance": {
+      "beginner_sedentary_or_older": {
+        "pct_1rm": {"low": 40, "mid": 45, "high": 50, "sources": ["garber2011", "kravitz2011"]},
+        "rir": {"low": 3, "mid": 4, "high": 5, "sources": ["zourdos2016", "heuristic"]}
+      },
+      "novice_strength_general": {
+        "pct_1rm": {"low": 60, "mid": 65, "high": 70, "sources": ["acsm2009"]},
+        "reps": {"low": 8, "mid": 10, "high": 12, "sources": ["acsm2009"]},
+        "sets_per_exercise": {"low": 1, "mid": 2, "high": 3, "sources": ["acsm2009"]},
+        "rir": {"low": 2, "mid": 3, "high": 4, "sources": ["zourdos2016", "moran2017", "heuristic"]}
+      },
+      "hypertrophy_novice_intermediate": {
+        "pct_1rm": {"low": 70, "mid": 77, "high": 85, "sources": ["acsm2009"]},
+        "reps": {"low": 8, "mid": 10, "high": 12, "sources": ["acsm2009"]},
+        "sets_per_exercise": {"low": 1, "mid": 2, "high": 3, "sources": ["acsm2009"]},
+        "rir": {"low": 1, "mid": 2, "high": 3, "sources": ["zourdos2016", "heuristic"]}
+      },
+      "strength_advanced": {
+        "pct_1rm": {"low": 80, "mid": 88, "high": 100, "sources": ["acsm2009"]},
+        "reps": {"low": 1, "mid": 4, "high": 6, "sources": ["acsm2009"]},
+        "sets_per_exercise": {"low": 3, "mid": 4, "high": 6, "sources": ["acsm2009"]},
+        "rir": {"low": 1, "mid": 2, "high": 3, "sources": ["zourdos2016", "heuristic"]}
+      },
+      "muscular_endurance": {
+        "pct_1rm": {"low": 40, "mid": 50, "high": 60, "sources": ["acsm2009"]},
+        "reps": {"low": 15, "mid": 20, "high": 25, "sources": ["acsm2009"]},
+        "rir": {"low": 2, "mid": 3, "high": 4, "sources": ["zourdos2016", "heuristic"]}
+      },
+      "power": {
+        "pct_1rm_upper_body": {"low": 30, "mid": 45, "high": 60, "sources": ["acsm2009"]},
+        "pct_1rm_lower_body": {"low": 0, "mid": 30, "high": 60, "sources": ["acsm2009"]},
+        "sets_per_exercise": {"low": 3, "mid": 4, "high": 5, "sources": ["acsm2009"]}
+      }
+    }
+  },
+
+  "resistance_frequency_days_per_week": {
+    "novice": {"low": 2, "mid": 2, "high": 3, "sources": ["acsm2009"]},
+    "intermediate": {"low": 3, "mid": 3, "high": 4, "sources": ["acsm2009"]},
+    "advanced": {"low": 4, "mid": 4, "high": 5, "sources": ["acsm2009"]}
+  },
+
+  "block_length_weeks": {
+    "_basis": "Consecutive build weeks before a deload.",
+    "novice": {"low": 3, "mid": 4, "high": 6, "sources": ["bell2023", "rogerson2024", "coleman2024"]},
+    "trained": {"low": 3, "mid": 4, "high": 6, "sources": ["bell2023", "rogerson2024"]}
+  },
+
+  "deload_placement": {
+    "every_n_weeks": {"low": 4, "mid": 5, "high": 6, "sources": ["bell2023", "rogerson2024"]},
+    "duration_days": {"low": 5, "mid": 7, "high": 7, "sources": ["bell2023", "rogerson2024"]},
+    "volume_reduction_frac": {"low": 0.30, "mid": 0.40, "high": 0.50, "sources": ["bell2023", "bosquet2007", "heuristic"]},
+    "intensity_reduction_frac": {"low": 0.0, "mid": 0.0, "high": 0.10, "sources": ["bell2023", "bosquet2007"]},
+    "optional_for_novices_if_plan_weeks_le": {"low": 6, "mid": 8, "high": 8, "sources": ["coleman2024", "heuristic"]},
+    "plan_templates": {
+      "_note": "B = build week, D = deload, T = taper/boss week. Descriptive templates; weeks not numeric caps.",
+      "6_weeks": "B B B B D(optional for novices) T",
+      "8_weeks": "B B B D B B B T",
+      "10_weeks": "B B B D B B B D B T",
+      "12_weeks": "B B B D B B B D B B T T"
+    }
+  },
+
+  "boss_taper": {
+    "duration_weeks": {"low": 1, "mid": 1, "high": 2, "sources": ["bosquet2007", "bell2023"]},
+    "volume_reduction_frac": {"low": 0.41, "mid": 0.50, "high": 0.60, "sources": ["bosquet2007"]},
+    "intensity_reduction_frac": {"low": 0.0, "mid": 0.0, "high": 0.0, "sources": ["bosquet2007"]},
+    "last_hard_session_days_before_boss": {"low": 2, "mid": 4, "high": 6, "sources": ["bell2023"]},
+    "boss_max_vs_30d_longest_frac": {"low": 1.0, "mid": 1.10, "high": 1.10, "sources": ["frandsen2025"]},
+    "rehearsal_session_min_frac_of_boss": {"low": 0.85, "mid": 0.90, "high": 0.95, "sources": ["frandsen2025", "heuristic"]}
+  },
+
+  "sources": {
+    "buist2008": "Buist I et al. Am J Sports Med 2008;36(1):33-39. doi:10.1177/0363546507307505",
+    "nielsen2014": "Nielsen RO et al. J Orthop Sports Phys Ther 2014;44(10):739-747. doi:10.2519/jospt.2014.5164",
+    "damsted2019": "Damsted C et al. J Orthop Sports Phys Ther 2019;49(4):230-238. doi:10.2519/jospt.2019.8541",
+    "fredette2022": "Fredette A et al. J Athl Train 2022;57(7):650-671. doi:10.4085/1062-6050-0195.21",
+    "frandsen2025": "Schuster Brandt Frandsen J et al. Br J Sports Med 2025;59(17):1203-1210. doi:10.1136/bjsports-2024-109380",
+    "videbaek2015": "Videbaek S et al. Sports Med 2015;45(7):1017-1026. doi:10.1007/s40279-015-0333-8",
+    "gabbett2016": "Gabbett TJ. Br J Sports Med 2016;50(5):273-280. doi:10.1136/bjsports-2015-095788",
+    "hulin2014": "Hulin BT et al. Br J Sports Med 2014;48(8):708-712. doi:10.1136/bjsports-2013-092524",
+    "lolli2019": "Lolli L et al. Br J Sports Med 2019;53(15):921-922. doi:10.1136/bjsports-2017-098110",
+    "impellizzeri2020_ijspp": "Impellizzeri FM et al. Int J Sports Physiol Perform 2020;15(6):907-913. doi:10.1123/ijspp.2019-0864",
+    "impellizzeri2020_jat": "Impellizzeri FM et al. J Athl Train 2020;55(9):893-901. doi:10.4085/1062-6050-501-19",
+    "impellizzeri2021": "Impellizzeri FM et al. Sports Med 2021;51(3):581-592. doi:10.1007/s40279-020-01378-6",
+    "andrade2020": "Andrade R et al. Sports Med 2020;50(9):1613-1635. doi:10.1007/s40279-020-01308-6",
+    "acsm2009": "ACSM Position Stand (Ratamess NA et al.). Progression models in resistance training for healthy adults. Med Sci Sports Exerc 2009;41(3):687-708. doi:10.1249/MSS.0b013e3181915670",
+    "garber2011": "Garber CE et al. ACSM Position Stand. Med Sci Sports Exerc 2011;43(7):1334-1359. doi:10.1249/MSS.0b013e318213fefb",
+    "kravitz2011": "Kravitz L. From 1998 to 2011: ACSM publishes updated exercise guidelines (secondary summary of garber2011). https://www.unm.edu/~lkravitz/Article%20folder/ACSMGuidelinesUNM.pdf",
+    "acsm_getp8_via_chp": "ACSM's Guidelines for Exercise Testing and Prescription 8th ed. (2010), as reproduced in Hong Kong Dept of Health Exercise Prescription Doctor's Handbook ch.4 (secondary source). https://www.chp.gov.hk/archive/epp/files/DoctorsHanbook_ch4.pdf",
+    "meeusen2013": "Meeusen R et al. ECSS/ACSM joint consensus on overtraining syndrome. Med Sci Sports Exerc 2013;45(1):186-205. doi:10.1249/MSS.0b013e318279a10a",
+    "foster1998": "Foster C. Med Sci Sports Exerc 1998;30(7):1164-1168. doi:10.1097/00005768-199807000-00023",
+    "foster2001": "Foster C et al. J Strength Cond Res 2001;15(1):109-115. PMID 11708692",
+    "seiler2010": "Seiler S. Int J Sports Physiol Perform 2010;5(3):276-291. doi:10.1123/ijspp.5.3.276",
+    "moran2017": "Moran-Navarro R et al. Eur J Appl Physiol 2017;117:2387-2399. doi:10.1007/s00421-017-3725-7",
+    "zourdos2016": "Zourdos MC et al. J Strength Cond Res 2016;30(1):267-275. doi:10.1519/JSC.0000000000001049",
+    "bell2023": "Bell L et al. Sports Med Open 2023;9:87. doi:10.1186/s40798-023-00633-0",
+    "rogerson2024": "Rogerson D et al. Sports Med Open 2024;10:26. doi:10.1186/s40798-024-00691-y",
+    "coleman2024": "Coleman M et al. PeerJ 2024;12:e16777. https://peerj.com/articles/16777/",
+    "bosquet2007": "Bosquet L et al. Med Sci Sports Exerc 2007;39(8):1358-1365. doi:10.1249/mss.0b013e31806010e0",
+    "rhea2004": "Rhea MR, Alderman BL. Res Q Exerc Sport 2004;75(4):413-422. doi:10.1080/02701367.2004.10609174",
+    "hootman2001": "Hootman JM et al. Am J Epidemiol 2001;154(3):251-258. doi:10.1093/aje/154.3.251",
+    "colbert2000": "Colbert LH et al. Clin J Sport Med 2000;10(4):259-263. doi:10.1097/00042752-200010000-00006",
+    "knapik2004": "Knapik JJ et al. Mil Med 2004;169(1):45-56. doi:10.7205/milmed.169.1.45",
+    "maeo2015": "Maeo S et al. Appl Physiol Nutr Metab 2015;40(3):274-279. doi:10.1139/apnm-2014-0390",
+    "extrapolation": "Author's extrapolation from adjacent evidence to a modality/level not directly studied; low confidence.",
+    "heuristic": "Engine-design heuristic, not a measured threshold; low confidence; requires professional review."
+  }
+}

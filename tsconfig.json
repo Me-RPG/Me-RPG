@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@healthrpg/engine": [
+        "packages/engine/src/index.ts"
+      ],
+      "@healthrpg/fitness-model": [
+        "packages/fitness-model/src/index.ts"
+      ],
+      "@healthrpg/content": [
+        "packages/content/src/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "packages/*/src",
+    "packages/*/test",
+    "apps/*/src"
+  ],
+  "exclude": [
+    "apps/mobile"
+  ]
+}

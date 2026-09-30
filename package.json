@@ -1,0 +1,30 @@
+{
+  "name": "healthrpg",
+  "private": true,
+  "version": "0.0.1",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json --noEmit && npm run typecheck -w @healthrpg/mobile",
+    "lint": "eslint packages apps",
+    "params": "node scripts/build-params.mjs",
+    "plan": "tsx apps/sim/src/plan.ts",
+    "play": "tsx apps/sim/src/play.ts",
+    "balance": "tsx apps/sim/src/balance.ts",
+    "mobile": "npm run start -w @healthrpg/mobile",
+    "mobile:web": "npm run web -w @healthrpg/mobile"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "eslint": "^9.0.0",
+    "fast-check": "^3.23.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.1.0"
+  }
+}

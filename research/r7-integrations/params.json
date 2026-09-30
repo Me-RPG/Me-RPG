@@ -1,0 +1,266 @@
+{
+  "version": "0.1.0-unreviewed",
+  "researched_on": "2026-09-28",
+  "platforms": {
+    "strava": {
+      "available": true,
+      "auth": "OAuth 2.0 authorization code; access token ~6h, refresh token; client secret server-side",
+      "rate_limits": {"default_single_player": {"overall_15min": 200, "overall_daily": 2000, "read_15min": 100, "read_daily": 1000}, "upgraded_10_athletes": {"overall_15min": 400, "overall_daily": 4000, "read_15min": 200, "read_daily": 2000}, "reviewed_apps": "per-app, set by Strava"},
+      "webhooks": "One push subscription per app; object_type activity|athlete; aspect_type create|update|delete; must 200 within 2s; deauth = athlete update authorized:false",
+      "data_restrictions": [
+        "Display Strava Data only to the user who provided it, even if public on Strava (Agreement 2.3 / Policy 2.3, 6.1; since Nov 2024)",
+        "No use in development, training, evaluation or operation of any AI Application incl. embeddings/RAG and derived/aggregated/anonymized data (Policy 5.3)",
+        "No processing for analytics, insights or product improvement (Policy 5.4)",
+        "Cache no longer than 7 days (Policy 6.2)",
+        "Delete within 30 days on user request/deauthorization/account deletion and certify in writing (Policy 7.4)",
+        "No use competitive to Strava (Policy 5.2)",
+        "Standard tier requires active Strava subscription (Policy 3.3; effective 2026-06-01 new / 2026-06-30 existing per secondary sources)"
+      ],
+      "attribution": "Official Connect with Strava button; 'Powered by Strava' or 'Compatible with Strava'; 'View on Strava' links (bold/underline/#FC5200); no Strava in app name/icon",
+      "rn_library": "No official SDK; expo-auth-session 57.0.13 (2026-09-24) or react-native-app-auth 8.4.1 (2026-07-06) + Supabase Edge Functions",
+      "approval_required": "Athlete capacity 1 by default; self-serve upgrade to 10; review for up to 9,999 (Standard); Extended Access 10,000+ case-by-case",
+      "notes": "API Agreement and API Policy both effective 2026-06-01. UNVERIFIED: exact Policy 6.1 wording (summariser output garbled re 9,999 threshold); subscription price (~$11.99/mo per third parties); club endpoint removals 2026-09-01 and api-v3 base URL / 2027-06-01 migration (secondary source Terra). Legal review needed on whether derived game XP counts as Strava Data.",
+      "sources": [
+        "https://www.strava.com/legal/api",
+        "https://www.strava.com/legal/api_policy",
+        "https://developers.strava.com/docs/rate-limits/",
+        "https://developers.strava.com/docs/getting-started/",
+        "https://developers.strava.com/docs/webhooks/",
+        "https://developers.strava.com/guidelines/",
+        "https://press.strava.com/articles/updates-to-stravas-api-agreement",
+        "https://support.strava.com/hc/en-us/articles/31798729397773-API-Agreement-Update-How-Data-Appears-on-3rd-Party-Apps",
+        "https://communityhub.strava.com/insider-journal-9/an-update-to-our-developer-program-13428",
+        "https://tryterra.co/blog/strava-api-changes-2026"
+      ]
+    },
+    "apple_healthkit": {
+      "available": true,
+      "auth": "On-device per-type read/write authorization; NSHealthShareUsageDescription / NSHealthUpdateUsageDescription; read-denial not revealed to app",
+      "rate_limits": "n/a (on-device)",
+      "webhooks": "Background delivery via HKObserverQuery + enableBackgroundDelivery; entitlement com.apple.developer.healthkit.background-delivery; some types max hourly on iOS",
+      "data_restrictions": [
+        "5.1.3(i): no use/disclosure for advertising, marketing or use-based data mining other than improving health management or health research, and only with permission; disclose specific data collected",
+        "5.1.3(ii): no false data written to HealthKit; no personal health info in iCloud",
+        "2.5.1: HealthKit only for health/fitness purposes, integration stated in app description",
+        "5.1.2(i): disclose and get explicit permission before sharing personal data with third-party AI"
+      ],
+      "attribution": "Apple Health marketing guidelines apply if using Apple Health imagery (UNVERIFIED, not fetched)",
+      "rn_library": "@kingstinct/react-native-healthkit 16.0.0 (2026-09-18, actively maintained, Nitro, Expo config plugin with background option, workout routes). react-native-health 1.19.0 (2024-10-15, feature freeze pending Swift rewrite). No official Expo HealthKit module found. Requires dev client/EAS, not Expo Go.",
+      "approval_required": "No partner approval; App Store review of health usage",
+      "notes": "Workouts, HR, energy, distance, HKWorkoutRoute locations with altitude. Guidelines page shows no last-updated date.",
+      "sources": [
+        "https://developer.apple.com/app-store/review/guidelines/",
+        "https://developer.apple.com/documentation/healthkit/hkhealthstore/enablebackgrounddelivery(for:frequency:withcompletion:)",
+        "https://github.com/kingstinct/react-native-healthkit",
+        "https://github.com/agencyenterprise/react-native-health",
+        "https://registry.npmjs.org/@kingstinct/react-native-healthkit"
+      ]
+    },
+    "google_health_connect": {
+      "available": true,
+      "auth": "On-device runtime permissions per data type; READ_HEALTH_DATA_HISTORY for >30 days before grant; READ_HEALTH_DATA_IN_BACKGROUND for background; READ_EXERCISE_ROUTES",
+      "rate_limits": "Undisclosed quotas; handle IllegalStateException with backoff; paginate with pageToken",
+      "webhooks": "None; poll via WorkManager (e.g. hourly) or changes token",
+      "data_restrictions": [
+        "Play Console health permissions declaration with per-permission justification",
+        "Permitted use cases include fitness/wellness and health-integrated games",
+        "No sale/transfer to advertisers or data brokers; no ad use; no third-party sharing without consent",
+        "Privacy policy must cover collection, use, retention, deletion, security",
+        "Default 30-day history limit before first permission grant",
+        "Exercise routes from other apps may require per-session consent and cannot be read in background"
+      ],
+      "attribution": "None specified",
+      "rn_library": "react-native-health-connect 4.1.3 (2026-08-06; built-in Expo config plugin since v4; compileSdk 36, minSdk 26; EAS build). expo-health-connect 0.1.1 is legacy.",
+      "approval_required": "Play Console health declaration review (~up to 7 days + 5-7 business days whitelist per library README)",
+      "notes": "Google Fit APIs supported until end of 2026, no new signups since 2024-05-01 (FAQ last updated 2026-08-21). Do not build on Google Fit.",
+      "sources": [
+        "https://support.google.com/googleplay/android-developer/answer/12991134",
+        "https://developer.android.com/health-and-fitness/health-connect/read-data",
+        "https://developer.android.com/health-and-fitness/health-connect/features/exercise-routes",
+        "https://developer.android.com/health-and-fitness/health-connect/migration/fit/faq",
+        "https://github.com/matinzd/react-native-health-connect"
+      ]
+    },
+    "garmin_connect": {
+      "available": true,
+      "auth": "OAuth 2.0 PKCE (legacy Health API used OAuth 1.0a); token lifetime ~3 months per secondary source (UNVERIFIED)",
+      "rate_limits": "UNVERIFIED (not in public docs)",
+      "webhooks": "Push (data POSTed on device sync) or ping/pull; backfill supported; evaluation environment",
+      "data_restrictions": [
+        "Enterprise use only; personal use not supported",
+        "Some metrics may require license fee or minimum device order for commercial use",
+        "Attribution required on any display/distribution of Garmin device-sourced data (Agreement 6.4, China-region variant FRM-0952 Rev. B)",
+        "AI Transparency Statement with explicit opt-in consent required if user data used for AI training/processing (China-region variant)",
+        "Retention/deletion terms UNVERIFIED"
+      ],
+      "attribution": "Garmin API Brand Guidelines: attribution on title-level displays, secondary screens, exported data, derived data (incl. analytics/ML/AI inputs), social sharing",
+      "rn_library": "None needed (cloud-to-cloud); expo-auth-session for PKCE + Supabase webhook endpoint. react-native-garmin-connect 0.3.0 (2024-07-30) unofficial/stale.",
+      "approval_required": "Yes; application reviewed in ~2 business days; integration 1-4 weeks",
+      "notes": "APIs: Health, Activity (FIT/GPX/TCX with GPS/HR/elevation), Women's Health, Training, Courses. Global agreement text not verified; only China-region PDF was reachable.",
+      "sources": [
+        "https://developer.garmin.com/gc-developer-program/overview/",
+        "https://developer.garmin.com/gc-developer-program/program-faq/",
+        "https://developer.garmin.com/gc-developer-program/activity-api/",
+        "https://developer.garmin.com/brand-guidelines/api-brand-guidelines/",
+        "https://www8.garmin.com/en-US/GARMINCONNECTDEVELOPERPROGRAMAGREEMENT/GARMINCONNECTDEVELOPERPROGRAMAGREEMENT_EN.pdf",
+        "https://developerportal.garmin.com/sites/default/files/OAuth2PKCE_1.pdf",
+        "https://openwearables.io/blog/garmin-connect-api-developer-guide-activities-health-metrics"
+      ]
+    },
+    "fitbit_web_api": {
+      "available": false,
+      "auth": "Legacy Fitbit OAuth 2.0 (deprecated); successor Google Health API uses Google OAuth 2.0 scopes https://www.googleapis.com/auth/googlehealth*",
+      "rate_limits": "Legacy 150 req/hour/user (secondary source); Google Health API UNVERIFIED",
+      "webhooks": "Legacy Subscriptions API; Google Health API has notify-only auto-subscribing webhooks",
+      "data_restrictions": [
+        "Legacy Fitbit Web API deprecated September 2026",
+        "Fitbit tokens do not carry over; users must re-consent via Google OAuth; avoid dual-linking",
+        "Google Health API terms/AI restrictions/OAuth verification UNVERIFIED (policies page 404)"
+      ],
+      "attribution": "UNVERIFIED",
+      "rn_library": "expo-auth-session + server-side REST",
+      "approval_required": "Google Cloud project + OAuth consent; verification likely for health scopes (UNVERIFIED)",
+      "notes": "Google Health API data types: exercise sessions, HR (1s), HRV, resting HR, altitude (1-min), floors; no GPS/route data type found (data-types page last updated 2026-09-28).",
+      "sources": [
+        "https://dev.fitbit.com/build/reference/web-api/",
+        "https://developers.google.com/health",
+        "https://developers.google.com/health/migration",
+        "https://developers.google.com/health/data-types",
+        "https://openwearables.io/blog/fitbit-web-api-shutdown-2026-migration-guide"
+      ]
+    },
+    "mapy_com": {
+      "available": true,
+      "auth": "API key per project (developer.mapy.com account); billing via Seznam Penezenka",
+      "rate_limits": "Credit-metered: Basic 250k free credits/month; Extended 10M free/month; overage 1.60 CZK/1k credits with volume tiers down to 0.2 CZK/1k. Tile 1, geocode 4, route 4, matrix10x10 40, elevation 4 credits. Hard rate limits UNVERIFIED.",
+      "webhooks": "n/a",
+      "data_restrictions": [
+        "No storing or caching of tiles or API results (T&C 4.6.2)",
+        "No scraping (4.6.2)",
+        "Mapy map data must not be combined with other map data (2.5.2)",
+        "Extended tariff: public, free, only Mapy data, attribution, catalogue listing, annual affidavit",
+        "Secure API key; no third-party keys (4.1-4.2)",
+        "Terms effective 2025-06-01"
+      ],
+      "attribution": "Clickable Mapy.com logo (>=30px on map, >=20px for routing/geocoding-only) linking to https://mapy.com/; copyright text 'Seznam.cz a.s. and others' linking to https://api.mapy.com/copyright when map displayed",
+      "rn_library": "No SDK; react-native-maps UrlTile or @maplibre/maplibre-react-native for tiles + REST",
+      "approval_required": false,
+      "notes": "Tiles: basic, outdoor (tourist), aerial, winter, names-overlay. Routing routeType foot_hiking (added 2025-09-23) prefers marked trails; up to 15 waypoints; GeoJSON/polyline. Elevation up to 256 points. No 'list trails near point' endpoint found.",
+      "sources": [
+        "https://developer.mapy.com/",
+        "https://developer.mapy.com/pricing/",
+        "https://developer.mapy.com/terms-and-conditions/",
+        "https://developer.mapy.com/rest-api-mapy-cz/atribution/",
+        "https://developer.mapy.com/rest-api-mapy-cz/function/routing/",
+        "https://developer.mapy.com/rest-api-mapy-cz/function/elevation-api/",
+        "https://developer.mapy.com/rest-api-mapy-cz/function/map-tiles/",
+        "https://developer.mapy.com/planning-routes-along-hiking-trails/"
+      ]
+    },
+    "openstreetmap": {
+      "available": true,
+      "auth": "None for public Overpass; identifying User-Agent required",
+      "rate_limits": "Public overpass-api.de: <10,000 queries/day and <1 GB/day; for ongoing app use ~100x less (~100 queries, 10 MB/day); slot-based per IP; 429/406 -> wait 30s; default timeout 180s, 512 MiB",
+      "webhooks": "n/a",
+      "data_restrictions": [
+        "Commercial use should use self-hosted or paid Overpass servers",
+        "No parallel scripts; cache results; no bbox-stitching world scrapes",
+        "ODbL share-alike: publicly distributed substantial extracts are Derivative Databases",
+        "Elevation: OpenTopoData public 100 locations/request, 1 call/s, 1000 calls/day",
+        "Elevation: Open-Elevation free 1000 requests/month; ~500 coords/month/IP keyless; paid EUR 5.99-59.99/mo",
+        "Elevation: Copernicus DEM GLO-30/90 free, reproduction/distribution permitted, mandatory notice"
+      ],
+      "attribution": "'(c) OpenStreetMap contributors' linked to https://www.openstreetmap.org/copyright (collapsible after 5s on interactive maps). Copernicus: '(c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.'",
+      "rn_library": "Server-side fetch to Overpass (Supabase function + geohash cache); map display via @maplibre/maplibre-react-native or react-native-maps",
+      "approval_required": false,
+      "notes": "Hiking routes: relations type=route + route=hiking|foot, network=iwn|nwn|rwn|lwn, name, ref, osmc:symbol, distance, ascent/descent; difficulty via sac_scale on ways. Example: relation[\"type\"=\"route\"][\"route\"~\"^(hiking|foot)$\"](around:10000,LAT,LON); out tags bb;",
+      "sources": [
+        "https://wiki.openstreetmap.org/wiki/Overpass_API",
+        "https://dev.overpass-api.de/overpass-doc/en/preface/commons.html",
+        "https://wiki.openstreetmap.org/wiki/Tag:route%3Dhiking",
+        "https://osmfoundation.org/wiki/Licence/Attribution_Guidelines",
+        "https://www.opentopodata.org/",
+        "https://open-elevation.com/",
+        "https://registry.opendata.aws/copernicus-dem/",
+        "https://docs.sentinel-hub.com/api/latest/static/files/data/dem/resources/license/License-COPDEM-30.pdf"
+      ]
+    },
+    "alltrails": {
+      "available": false,
+      "auth": "n/a (no public API)",
+      "rate_limits": "n/a",
+      "webhooks": "n/a",
+      "data_restrictions": [
+        "Terms (updated 2025-12-17) prohibit automated queries and scraping/mining data",
+        "No commercial use without express written consent",
+        "No copying/republishing materials without written consent",
+        "Bot protection via DataDome"
+      ],
+      "attribution": "n/a",
+      "rn_library": "None; do not use unofficial wrappers",
+      "approval_required": "Only via bespoke business partnership (examples: Garmin, COROS, OpenAI ChatGPT app 2025-11-20, Anthropic Claude)",
+      "notes": "Conclusion: not a viable data source. Affiliate program exists (page 403, contents UNVERIFIED) but provides no known data access.",
+      "sources": [
+        "https://www.alltrails.com/terms",
+        "https://datadome.co/customers-stories/alltrails-secures-its-mobile-apps-website-and-api-from-bad-bots-with-datadome/",
+        "https://www.alltrails.com/press/introducing-alltrails-in-chatgpt",
+        "https://the5krunner.com/2026/06/12/coros-alltrails-integration/",
+        "https://www.alltrails.com/affiliates"
+      ]
+    },
+    "komoot": {
+      "available": false,
+      "auth": "n/a (partner-only)",
+      "rate_limits": "n/a",
+      "webhooks": "n/a",
+      "data_restrictions": ["No public API; partner access for selected established GPS/wearable manufacturers"],
+      "attribution": "n/a",
+      "rn_library": "None",
+      "approval_required": "Partnership agreement",
+      "notes": "Owned by Bending Spoons. Support article returned 403; wording from search snippet.",
+      "sources": ["https://support.komoot.com/hc/en-us/articles/10331570510618-komoot-API"]
+    },
+    "outdooractive": {
+      "available": true,
+      "auth": "API key + project key; test keys available",
+      "rate_limits": "UNVERIFIED",
+      "webhooks": "n/a",
+      "data_restrictions": [
+        "B2B only (entrepreneurs); provider approval before public deployment",
+        "Content must be refreshed at least every 24 hours",
+        "Pages with API content must carry robots noindex",
+        "No mass downloads",
+        "API Terms dated 2023-08-14"
+      ],
+      "attribution": "Outdooractive logo linking to homepage in imprint; source, author and photographer credits in detail views; license info",
+      "rn_library": "REST",
+      "approval_required": "Yes; commercial contract, pricing not published",
+      "notes": "Tour geometry/elevation availability inferred, verify in Data Model docs.",
+      "sources": ["https://developers.outdooractive.com/", "https://corporate.outdooractive.com/en/api-terms", "https://developers.outdooractive.com/API-Reference/Data-API.html"]
+    },
+    "hiking_project": {
+      "available": false,
+      "auth": "n/a",
+      "rate_limits": "n/a",
+      "webhooks": "n/a",
+      "data_restrictions": ["Data API deprecated late 2020; onX declines new requests"],
+      "attribution": "n/a",
+      "rn_library": "None",
+      "approval_required": "n/a",
+      "notes": "Shut down; applies to Mountain Project and MTB Project too.",
+      "sources": ["https://www.hikingproject.com/data", "https://www.mountainproject.com/data"]
+    },
+    "us_nps": {
+      "available": true,
+      "auth": "API key (X-Api-Key header or api_key param)",
+      "rate_limits": "1,000 requests/hour; exceeding blocks key for 1 hour",
+      "webhooks": "n/a",
+      "data_restrictions": ["Subject to NPS disclaimer page (not fetched)", "US only", "No trails endpoint with geometry"],
+      "attribution": "UNVERIFIED",
+      "rn_library": "REST",
+      "approval_required": false,
+      "notes": "Endpoints include parks, activities, thingstodo, places, alerts, campgrounds, events, articles. Good for POIs/alerts flavour, not trail geometry.",
+      "sources": ["https://www.nps.gov/subjects/developer/guides.htm", "https://www.nps.gov/subjects/developer/get-started.htm", "https://www.nps.gov/subjects/digital/nps-data-api.htm"]
+    }
+  }
+}

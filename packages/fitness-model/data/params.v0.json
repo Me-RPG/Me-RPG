@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1-UNVERIFIED",
+  "_note": "PLACEHOLDER values for engine scaffolding only. Replace with reviewed values from research/r1..r4 before any balance work. Do not ship.",
+  "capacities": {
+    "aerobic":            { "graceDays": 14, "tauFitnessDays": 60,  "tauFatigueDays": 7, "retainedFloorFrac": 0.3, "retrainingMultiplier": 1.5, "gainPerLoad": 0.004, "fatiguePerLoad": 0.006, "minStimulusLoad": 60, "diminishingCeiling": 60 },
+    "muscular_strength":  { "graceDays": 21, "tauFitnessDays": 90,  "tauFatigueDays": 5, "retainedFloorFrac": 0.4, "retrainingMultiplier": 2.0, "gainPerLoad": 0.005, "fatiguePerLoad": 0.008, "minStimulusLoad": 50, "diminishingCeiling": 50 },
+    "muscular_endurance": { "graceDays": 14, "tauFitnessDays": 45,  "tauFatigueDays": 5, "retainedFloorFrac": 0.25, "retrainingMultiplier": 1.5, "gainPerLoad": 0.004, "fatiguePerLoad": 0.006, "minStimulusLoad": 40, "diminishingCeiling": 55 },
+    "mobility":           { "graceDays": 14, "tauFitnessDays": 40,  "tauFatigueDays": 3, "retainedFloorFrac": 0.3, "retrainingMultiplier": 1.3, "gainPerLoad": 0.006, "fatiguePerLoad": 0.002, "minStimulusLoad": 20, "diminishingCeiling": 40 }
+  },
+  "activities": {
+    "walk":     { "met": 3.5, "split": { "aerobic": 0.75, "muscular_strength": 0.0,  "muscular_endurance": 0.2,  "mobility": 0.05 } },
+    "hike":     { "met": 6.0, "split": { "aerobic": 0.65, "muscular_strength": 0.1,  "muscular_endurance": 0.2,  "mobility": 0.05 } },
+    "run":      { "met": 9.0, "split": { "aerobic": 0.8,  "muscular_strength": 0.0,  "muscular_endurance": 0.2,  "mobility": 0.0 } },
+    "cycle":    { "met": 7.0, "split": { "aerobic": 0.75, "muscular_strength": 0.05, "muscular_endurance": 0.2,  "mobility": 0.0 } },
+    "swim":     { "met": 7.0, "split": { "aerobic": 0.7,  "muscular_strength": 0.05, "muscular_endurance": 0.2,  "mobility": 0.05 } },
+    "row":      { "met": 7.0, "split": { "aerobic": 0.6,  "muscular_strength": 0.1,  "muscular_endurance": 0.3,  "mobility": 0.0 } },
+    "strength": { "met": 5.0, "split": { "aerobic": 0.05, "muscular_strength": 0.7,  "muscular_endurance": 0.2,  "mobility": 0.05 } },
+    "hiit":     { "met": 8.0, "split": { "aerobic": 0.5,  "muscular_strength": 0.15, "muscular_endurance": 0.3,  "mobility": 0.05 } },
+    "yoga":     { "met": 2.5, "split": { "aerobic": 0.05, "muscular_strength": 0.1,  "muscular_endurance": 0.15, "mobility": 0.7 } },
+    "mobility": { "met": 2.3, "split": { "aerobic": 0.0,  "muscular_strength": 0.0,  "muscular_endurance": 0.1,  "mobility": 0.9 } },
+    "other":    { "met": 4.0, "split": { "aerobic": 0.5,  "muscular_strength": 0.15, "muscular_endurance": 0.25, "mobility": 0.1 } }
+  },
+  "load": {
+    "elevationLoadPerMeter": 0.5,
+    "rpeReference": 5,
+    "rpeMin": 1,
+    "rpeMax": 10
+  }
+}

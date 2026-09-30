@@ -1,0 +1,644 @@
+{
+  "version": "0.1.0-unreviewed",
+  "topic": "R5 low-intrusion fitness assessment",
+  "generated": "2026-09-28",
+  "disclaimer": "Research draft. Not medical or legal advice. All safety rules, thresholds and user-facing wording require clinician and legal review before use. Values marked unverified are placeholders.",
+  "conventions": {
+    "uncertain_numeric_format": {"low": "conservative/lower bound", "mid": "point estimate", "high": "upper bound", "sources": "reference keys (see references)"},
+    "confidence_levels": ["high", "medium", "low"],
+    "vo2_units": "mL/kg/min",
+    "never_collect": ["body_weight", "height", "waist", "body_fat", "BMI", "precise_location", "diagnosis_names", "free_text_health"]
+  },
+
+  "safety_screen": {
+    "instrument_decision": {
+      "recommended_v1": "self_authored_acsm_logic_screen",
+      "alternative": "licensed_parq_plus_unmodified",
+      "parq_plus_licensing": {
+        "owner": "PAR-Q+ Collaboration",
+        "free_use_scope": ["participants", "exercise professionals (screening)", "non-commercial research", "not-for-profit organizations"],
+        "commercial_use": "requires express written approval / commercial licence; for-profit hyperlinks also require licence or licence in progress",
+        "modification": "prohibited - entire questionnaire must be used, no changes",
+        "attribution": "required; cite Warburton, Jamnik, Bredin, Gledhill on behalf of PAR-Q+ Collaboration, HFJC 4(2):3-23, 2011",
+        "clearance_validity_months": 12,
+        "confidence": "high",
+        "sources": ["parq_2025_form", "parq_terms"]
+      },
+      "note": "Do not label the self-authored screen as PAR-Q+. Question text below is paraphrased design text, not PAR-Q+ wording."
+    },
+    "questions": {
+      "id": "safety",
+      "type": "multi_select",
+      "prompt": "Before your journey: do any of these apply to you right now?",
+      "options": [
+        {"id": "S1", "text": "A doctor has told me I have a heart, blood-vessel, lung, kidney, or metabolic condition (such as diabetes).", "basis": "ACSM 2015 known CV/metabolic/renal disease; PAR-Q+ Q1/Q4 topics"},
+        {"id": "S2", "text": "Recently I have had chest pain or pressure, fainting, unusual shortness of breath, or dizziness with exertion.", "basis": "ACSM 2015 signs/symptoms; PAR-Q+ Q2/Q3 topics"},
+        {"id": "S3", "text": "A health professional has told me to exercise only with medical supervision or to limit my activity.", "basis": "PAR-Q+ Q7 topic"},
+        {"id": "S4", "text": "I am currently unwell (cold, fever) or recovering from surgery or a recent injury.", "basis": "PAR-Q+ delay conditions"},
+        {"id": "S5", "text": "I am pregnant or recently gave birth.", "basis": "PAR-Q+ delay condition; ACOG CO 804; Mottola 2018"},
+        {"id": "NONE", "text": "None of these.", "exclusive": true}
+      ],
+      "storage": "store derived state + screen date only; do not store raw selections beyond what is needed to re-derive state; never free text",
+      "confidence": "low"
+    },
+    "rule": {
+      "evaluation_order": ["S2", "S4", "S1_or_S3", "S5", "age_activity_gate", "default"],
+      "states": {
+        "pause_and_refer": {
+          "trigger": "S2",
+          "allowed_intensity": "very light only (breathing, gentle mobility)",
+          "trials": "none",
+          "message_key": "recommend_clinician_before_increasing_activity",
+          "unlock": "self-attested clearance by a health professional"
+        },
+        "rest_state": {
+          "trigger": "S4",
+          "allowed_intensity": "rest/recovery content",
+          "trials": "none",
+          "reask_days": {"low": 3, "mid": 5, "high": 7, "sources": ["parq_2025_form"]},
+          "message_key": "wait_until_you_feel_better"
+        },
+        "gentle_path": {
+          "trigger": "S1 or S3",
+          "allowed_intensity": "light-to-moderate; talk test comfortable (full sentences); RPE <= somewhat hard",
+          "trials": "non-maximal only (talk test, sit-to-rise if no limitation, 6-min walk at comfortable pace, chair stand)",
+          "max_aerobic_band_prescribed": 2,
+          "message_key": "recommend_clearance_before_vigorous",
+          "unlock": "self-attested clearance"
+        },
+        "prenatal_path": {
+          "trigger": "S5",
+          "allowed_intensity": "moderate, low-impact",
+          "exclude_tags": ["contact", "fall_risk", "prolonged_supine", "maximal", "breath_hold"],
+          "trials": "talk test only",
+          "max_aerobic_band_prescribed": 2,
+          "message_key": "discuss_with_prenatal_provider",
+          "sources": ["acog_804", "mottola_2018"]
+        },
+        "vigorous_locked": {
+          "trigger": "age_band_min >= 45 AND activity_level <= 3",
+          "allowed_intensity": "moderate by default",
+          "trials": "vigorous/maximal trials require explicit opt-in acknowledgment",
+          "sources": ["parq_2025_form"]
+        },
+        "standard": {"trigger": "NONE and no other gate", "allowed_intensity": "all, subject to progression caps (R3)"}
+      },
+      "acsm_2015_reference_logic": {
+        "regular_exercise_definition": "planned structured PA >= 30 min moderate on >= 3 d/wk for >= 3 months",
+        "not_active": {"no_disease_no_symptoms": "no clearance; start light-moderate", "known_disease_asymptomatic": "clearance recommended", "symptoms": "clearance recommended"},
+        "active": {"no_disease_no_symptoms": "continue moderate or vigorous", "known_disease_asymptomatic": "continue moderate; clearance before vigorous", "symptoms": "discontinue; seek clearance"},
+        "confidence": "medium-high",
+        "sources": ["riebe_2015"]
+      },
+      "rescreen": {"interval_months": 12, "on_health_change": true, "sources": ["parq_2025_form"]},
+      "in_quest_safety": "persistent 'I feel unwell' control ending the quest and showing stop-and-seek-care guidance",
+      "confidence": "low"
+    }
+  },
+
+  "onboarding_questions": [
+    {
+      "id": "safety",
+      "text": "See safety_screen.questions",
+      "options": "see safety_screen.questions.options",
+      "mapping": "safety_screen.rule"
+    },
+    {
+      "id": "age_band",
+      "text": "Which age range are you in?",
+      "options": ["18-29", "30-39", "40-49", "50-59", "60-69", "70+"],
+      "mapping": {
+        "age_midpoint_years": {"18-29": 24, "30-39": 35, "40-49": 45, "50-59": 55, "60-69": 65, "70+": 74},
+        "under_18": "route to separate guardian-consent flow (out of scope)",
+        "uses": ["nonexercise_vo2max_model", "friend_norms", "vigorous_gate"]
+      },
+      "confidence": "low"
+    },
+    {
+      "id": "sex_for_norms",
+      "text": "Which comparison table should we use? (Only used to compare your results with published norms.)",
+      "options": ["female", "male", "prefer_not_to_say"],
+      "mapping": {"model_sex_value": {"male": 1, "female": 0, "prefer_not_to_say": 0.5}, "norms": {"prefer_not_to_say": "average of male and female tables"}},
+      "confidence": "low"
+    },
+    {
+      "id": "activity_level",
+      "text": "Which best describes your usual activity over the last month?",
+      "options": [
+        {"value": 0, "text": "I mostly avoid walking or physical effort."},
+        {"value": 1, "text": "Light activity only, like leisurely walks or taking the stairs."},
+        {"value": 2, "text": "Some moderate activity (e.g., brisk walking, yoga, easy cycling), about 10-60 minutes a week."},
+        {"value": 3, "text": "Moderate activity for more than an hour a week."},
+        {"value": 4, "text": "Some vigorous activity (e.g., running, hard cycling), under 30 minutes a week."},
+        {"value": 5, "text": "Vigorous activity about 30-60 minutes a week."},
+        {"value": 6, "text": "Vigorous activity about 1-3 hours a week."},
+        {"value": 7, "text": "Vigorous activity more than 3 hours a week."}
+      ],
+      "mapping": {
+        "PA_R": "value (0-7), paraphrase of NASA/JSC Physical Activity Rating used by Jackson 1990",
+        "acsm_regularly_active": "value >= 3",
+        "approx_mvpa_min_per_week": {"0": 0, "1": 20, "2": 35, "3": 90, "4": 110, "5": 150, "6": 240, "7": 360},
+        "approx_mvpa_note": "low-confidence conversion for WHO-band logic only"
+      },
+      "sources": ["jackson_1990", "topend_nonexercise", "peterman_2020"],
+      "confidence": "medium"
+    },
+    {
+      "id": "strength_days",
+      "text": "On how many days in a typical week do you do muscle-strengthening activity (weights, bodyweight exercises, resistance bands, heavy physical work)?",
+      "options": ["0", "1", "2", "3+"],
+      "mapping": "activity_level_to_capacity_bands.muscular_strength",
+      "sources": ["who_2020"],
+      "confidence": "low"
+    },
+    {
+      "id": "functional_check",
+      "text": "Which of these can you do today without much difficulty? (Select all that apply.)",
+      "options": [
+        {"id": "walk30", "text": "Walk for 30 minutes at a comfortable pace"},
+        {"id": "stairs2", "text": "Climb two flights of stairs without stopping"},
+        {"id": "floor_rise", "text": "Get up from sitting on the floor without using my hands"},
+        {"id": "toe_touch", "text": "Touch my toes with straight legs"},
+        {"id": "hold30", "text": "Hold a plank or push-up position for 30 seconds"},
+        {"id": "none", "text": "None of these right now", "exclusive": true}
+      ],
+      "mapping": "activity_level_to_capacity_bands (modifiers)",
+      "sources": ["brito_2014"],
+      "confidence": "low"
+    },
+    {
+      "id": "limitations",
+      "text": "Anything we should work around? (Select all that apply. No details needed.)",
+      "options": [
+        {"id": "upper_body", "text": "Upper body (shoulder, elbow, wrist)", "exclude_tags": ["pushup", "overhead", "hanging"], "lock_trials": ["pushup"]},
+        {"id": "lower_body", "text": "Lower body (hip, knee, ankle, foot)", "exclude_tags": ["jumping", "deep_knee_flexion", "running_default"], "prefer_tags": ["low_impact", "chair_supported"], "lock_trials": ["wall_sit", "sit_to_rise", "cooper_12min"]},
+        {"id": "back_core", "text": "Back or core", "exclude_tags": ["loaded_flexion", "heavy_lifting"], "lock_trials": ["sit_to_rise", "sit_and_reach"]},
+        {"id": "low_impact", "text": "I prefer low-impact movement", "exclude_tags": ["running_default", "jumping"]},
+        {"id": "pregnant_postpartum", "text": "Pregnant or recently gave birth", "sets_state": "prenatal_path"},
+        {"id": "mobility_aid", "text": "I use a mobility aid (cane, walker, crutches)", "prefer_tags": ["seated", "supported"], "lock_trials": ["cooper_12min", "rockport_1mile", "sit_to_rise"]},
+        {"id": "wheelchair", "text": "I use a wheelchair", "prefer_tags": ["seated", "upper_body_aerobic"], "convert": "step/walk goals -> push/time goals", "lock_trials": ["cooper_12min", "rockport_1mile", "six_min_walk", "chair_stand", "sit_to_rise", "wall_sit"]},
+        {"id": "balance", "text": "Balance is a concern for me", "exclude_tags": ["single_leg_unsupported", "eyes_closed"], "prefer_tags": ["supported"]},
+        {"id": "none", "text": "None", "exclusive": true}
+      ],
+      "mapping": {"mobility_band_penalty_per_chip": ["lower_body", "back_core", "balance", "mobility_aid"], "penalty": 1},
+      "storage": "store chip ids only; editable any time",
+      "confidence": "low"
+    },
+    {
+      "id": "goals",
+      "text": "What do you want your quests to focus on? (Pick up to 2.)",
+      "options": ["build_stamina", "get_stronger", "move_more_freely", "steady_habit", "energy_and_stress", "train_for_event"],
+      "mapping": {
+        "quest_mix_weights_default": {"aerobic": 0.4, "strength": 0.3, "mobility": 0.2, "recovery": 0.1},
+        "per_goal_shift": {"build_stamina": {"aerobic": 0.15}, "get_stronger": {"strength": 0.15}, "move_more_freely": {"mobility": 0.15}, "steady_habit": {"recovery": 0.05}, "energy_and_stress": {"mobility": 0.05, "recovery": 0.05}, "train_for_event": {"aerobic": 0.15}},
+        "normalize": true,
+        "train_for_event_optional_fields": ["event_date", "event_type"],
+        "note": "avoid weight-loss framing; never collect weight"
+      },
+      "confidence": "low"
+    }
+  ],
+
+  "activity_level_to_capacity_bands": {
+    "band_scale": {"1": "novice", "2": "developing", "3": "capable", "4": "strong", "5": "elite"},
+    "aerobic": {
+      "method": "nonexercise_vo2max_model -> FRIEND percentile",
+      "percentile_to_band": [
+        {"band": 1, "pct_below": 25},
+        {"band": 2, "pct_from": 25, "pct_below": 50},
+        {"band": 3, "pct_from": 50, "pct_below": 75},
+        {"band": 4, "pct_from": 75, "pct_below": 90},
+        {"band": 5, "pct_from": 90}
+      ],
+      "prescribed_band_offset_se_multiplier": {"low": 0.5, "mid": 0.5, "high": 1.0, "sources": ["design"]},
+      "friend_2015_treadmill_percentiles": {
+        "percentiles": [5, 10, 25, 50, 75, 90, 95],
+        "male": {
+          "20-29": [29.0, 32.1, 40.1, 48.0, 55.2, 61.8, 66.3],
+          "30-39": [27.2, 30.2, 35.9, 42.4, 49.2, 56.5, 59.8],
+          "40-49": [24.2, 26.8, 31.9, 37.8, 45.0, 52.1, 55.6],
+          "50-59": [20.9, 22.8, 27.1, 32.6, 39.7, 45.6, 50.7],
+          "60-69": [17.4, 19.8, 23.7, 28.2, 34.5, 40.3, 43.0],
+          "70-79": [16.3, 17.1, 20.4, 24.4, 30.4, 36.6, 39.7]
+        },
+        "female": {
+          "20-29": [21.7, 23.9, 30.5, 37.6, 44.7, 51.3, 56.0],
+          "30-39": [19.0, 20.9, 25.3, 30.2, 36.1, 41.4, 45.8],
+          "40-49": [17.0, 18.8, 22.1, 26.7, 32.4, 38.4, 41.7],
+          "50-59": [16.0, 17.3, 19.9, 23.4, 27.6, 32.0, 35.9],
+          "60-69": [13.4, 14.6, 17.2, 20.0, 23.8, 27.0, 29.4],
+          "70-79": [13.1, 13.6, 15.6, 18.3, 20.8, 23.1, 24.1]
+        },
+        "age_band_map": {"18-29": "20-29", "70+": "70-79"},
+        "note": "FRIEND 2022 update is 1.5-4.6 lower for treadmill; consider switching once table obtained",
+        "confidence": "high",
+        "sources": ["kaminsky_2015", "kaminsky_2022"]
+      }
+    },
+    "muscular_strength": {
+      "base_by_strength_days": {"0": 1, "1": 2, "2": 3, "3+": 3},
+      "modifiers": {"floor_rise": 0.5, "hold30": 0.5, "PA_R_ge_5": 0.5},
+      "rounding": "floor",
+      "clamp": [1, 4],
+      "band5_requires": "trial or history evidence",
+      "confidence": "low",
+      "sources": ["who_2020", "design"]
+    },
+    "muscular_endurance": {
+      "base_by_PA_R": {"0": 1, "1": 1, "2": 2, "3": 2, "4": 3, "5": 3, "6": 4, "7": 4},
+      "modifiers": {"walk30": 0.5, "stairs2": 0.5, "none_selected": -0.5},
+      "rounding": "floor",
+      "clamp": [1, 4],
+      "band5_requires": "history chronic MVPA >= 450 min/wk or trial",
+      "confidence": "low",
+      "sources": ["jackson_1990", "who_2020", "design"]
+    },
+    "mobility": {
+      "base": 3,
+      "modifiers": {"floor_rise": 1, "toe_touch": 1, "none_selected": -1},
+      "limitation_penalty": {"lower_body": -1, "back_core": -1, "balance": -1, "mobility_aid": -1},
+      "clamp": [1, 5],
+      "confidence": "low",
+      "sources": ["brito_2014", "design"]
+    },
+    "recalibration": {
+      "window_quests": 5,
+      "too_hard_threshold": 3,
+      "too_easy_threshold": 4,
+      "step": 1,
+      "capped_by_safety_state": true,
+      "earliest_after_days": {"low": 7, "mid": 14, "high": 14, "sources": ["design"]},
+      "confidence": "low"
+    }
+  },
+
+  "nonexercise_vo2max_model": {
+    "primary": {
+      "name": "Jackson 1990 N-Ex BMI model with imputed reference BMI",
+      "equation": "VO2max = 56.363 + 1.921*PA_R - 0.381*age - 0.754*BMI + 10.987*sex",
+      "coefficients": {"intercept": 56.363, "PA_R": 1.921, "age": -0.381, "BMI": -0.754, "sex_male1_female0": 10.987},
+      "published_accuracy": {"R": 0.78, "SEE": {"low": 5.6, "mid": 5.7, "high": 5.7, "sources": ["jackson_1990", "peterman_2020"]}},
+      "development_sample": "n=1543 validation / 466 cross-validation, 9.7% female, NASA/JSC",
+      "coefficient_confidence": "high",
+      "sources": ["jackson_1990", "peterman_2020", "topend_nonexercise"]
+    },
+    "bmi_imputation": {
+      "rationale": "App must not collect weight/height; substitute reference-population mean BMI by sex and age band (derived from FRIEND 2015 cohort mean height and weight)",
+      "male": {"20-29": 25.6, "30-39": 25.8, "40-49": 27.0, "50-59": 27.8, "60-69": 27.7, "70-79": 27.2},
+      "female": {"20-29": 24.0, "30-39": 26.1, "40-49": 27.4, "50-59": 28.8, "60-69": 29.2, "70-79": 28.5},
+      "unknown_sex": "mean of male and female values",
+      "within_band_bmi_sd": {"low": 4.5, "mid": 5.5, "high": 6.5, "sources": ["kaminsky_2015", "derived"]},
+      "bias_warning": "systematically overestimates VO2max for players with above-mean BMI; mitigated by conservative prescribed band",
+      "confidence": "low"
+    },
+    "total_se_with_imputation": {
+      "male": {"low": 6.5, "mid": 6.9, "high": 7.5, "sources": ["derived"]},
+      "female": {"low": 6.8, "mid": 7.4, "high": 8.0, "sources": ["derived"]},
+      "unknown_sex": {"low": 6.7, "mid": 7.2, "high": 7.8, "sources": ["derived"]}
+    },
+    "optional_hr_ratio_model": {
+      "name": "Uth heart-rate ratio method",
+      "equation": "VO2max = PF * HRmax / HRrest",
+      "PF": {"male": 15.3, "female": 14.5, "unknown": 14.9},
+      "HRmax_equation": "208 - 0.7*age (Tanaka 2001)",
+      "input_source": "resting HR from linked wearable only (never asked)",
+      "published_SEE": {"measured_HRmax": 2.7, "age_predicted_HRmax": 4.7, "population": "well-trained men n=36; women PF from n=27 trained"},
+      "se_to_use": {"low": 6.0, "mid": 8.0, "high": 10.0, "sources": ["uth_2004", "uth_2005", "molina_garcia_2022"]},
+      "caveat": "resting-based wearable estimates overestimate on average (+2.17, LoA -13.1 to +17.4); never unlock vigorous content on this alone",
+      "confidence": "medium"
+    },
+    "blend": {
+      "method": "inverse-variance weighted mean of available estimates",
+      "clamp": [12, 70],
+      "precedence": "device VO2max / history / trial estimates replace questionnaire estimate when their SE is smaller",
+      "confidence": "low"
+    },
+    "inputs": {"required": ["age_band", "activity_level"], "optional": ["sex_for_norms", "resting_hr_from_device", "device_vo2max"], "not_used": ["BMI", "waist", "percent_fat", "weight"]},
+    "alternatives_catalogue": [
+      {"name": "Jackson 1990 %fat", "equation": "50.513 + 1.589*PA_R - 0.289*age - 0.552*pct_fat + 5.863*sex", "R": 0.81, "SEE": 5.3, "needs": "percent fat", "usable": false},
+      {"name": "Wier 2006 BMI", "equation": "57.402 - 0.372*age + 8.596*sex + 1.396*PASS - 0.683*BMI", "R": 0.80, "SEE": 4.9, "needs": "BMI, PASS 0-10", "usable": "only with imputed BMI and PASS wording (not verified)"},
+      {"name": "Wier 2006 waist", "equation": "59.416 - 0.327*age + 11.488*sex + 1.297*PASS - 0.266*WC_cm", "R": 0.81, "SEE": 4.8, "needs": "waist", "usable": false},
+      {"name": "Nes 2011 HUNT men", "equation": "100.27 - 0.296*age - 0.369*WC_cm - 0.155*RHR + 0.226*PAI", "R2": 0.61, "SEE": 5.70, "needs": "waist, RHR, HUNT PA index", "usable": false},
+      {"name": "Nes 2011 HUNT women", "equation": "74.736 - 0.247*age - 0.259*WC_cm - 0.114*RHR + 0.198*PAI", "R2": 0.56, "SEE": 5.14, "needs": "waist, RHR, HUNT PA index", "usable": false},
+      {"name": "Jurca 2005 ACLS (METs)", "equation": "18.81 + 2.49*sex - 0.08*age - 0.17*BMI - 0.05*RHR + 0.81*PA1 + 1.17*PA2 + 2.16*PA3 + 3.05*PA4", "output": "METs (x3.5)", "needs": "BMI, RHR", "usable": false},
+      {"name": "Schembre & Riebe 2011 IPAQ-SF", "R2": 0.43, "SEE": 5.45, "needs": "IPAQ-SF + covariates; college sample n=80", "usable": false}
+    ],
+    "hunt_pa_index_scoring": {
+      "frequency": {"never": 0, "lt_once_week": 0, "once_week": 1, "two_three_week": 2.5, "almost_daily": 5},
+      "intensity": {"easy_no_sweat": 1, "breathless_sweat": 2, "near_exhaustion": 3},
+      "duration": {"lt_15min": 0.1, "15_29min": 0.38, "30_60min": 0.75, "gt_60min": 1.0},
+      "index": "frequency * intensity * duration",
+      "confidence": "medium (from Nauman 2012 same HUNT group; exact Nes 2011 scoring unverified)",
+      "sources": ["nauman_2012"]
+    },
+    "change_tracking_warning": "Non-exercise equations detect direction of fitness change correctly only ~56% of the time (median of 27 equations); do not use re-answered questionnaires to measure progress",
+    "sources": ["jackson_1990", "wier_2006", "nes_2011", "nes_2014", "peterman_2020", "uth_2004", "uth_2005", "tanaka_2001", "kaminsky_2015"]
+  },
+
+  "optional_trials": [
+    {
+      "id": "cooper_12min",
+      "game_name": "Messenger's Run",
+      "capacity": "aerobic",
+      "protocol": "Warm up 5-10 min; cover maximum distance in 12 minutes running/walking on flat ground; GPS distance.",
+      "scoring": {"equation": "VO2max = (distance_m - 504.9) / 44.73", "then": "FRIEND percentile -> aerobic band", "se": {"low": 3.5, "mid": 5.0, "high": 7.0, "sources": ["cooper_1968", "design"]}},
+      "safety_tier": "vigorous_maximal",
+      "locked_states": ["pause_and_refer", "rest_state", "gentle_path", "prenatal_path"],
+      "requires_opt_in_if": "vigorous_locked",
+      "needs_weight": false,
+      "confidence": "medium"
+    },
+    {
+      "id": "rockport_1mile",
+      "game_name": "Pilgrim's Mile",
+      "capacity": "aerobic",
+      "protocol": "Walk 1 mile (1609 m) as fast as possible on flat ground; record time and heart rate at finish (wearable).",
+      "scoring": {
+        "equation_relative": "VO2max = 132.853 - 0.0769*weight_lb - 0.3877*age + 6.315*sex - 3.2649*time_min - 0.1565*HR_end",
+        "weight_handling": "impute FRIEND sex/age mean weight (male ~83-88 kg, female ~66-77 kg) or fall back to time-only bands",
+        "friend_mean_weight_kg": {"male": {"20-29": 82.6, "30-39": 82.6, "40-49": 86.3, "50-59": 88.1, "60-69": 87.1, "70-79": 83.9}, "female": {"20-29": 66.3, "30-39": 71.4, "40-49": 74.0, "50-59": 76.9, "60-69": 77.2, "70-79": 74.8}},
+        "published_accuracy": "absolute-VO2 equation r=0.92-0.93, SEE 0.325-0.355 L/min",
+        "se_with_imputed_weight": {"low": 5.0, "mid": 6.0, "high": 7.5, "sources": ["kline_1987", "derived"]}
+      },
+      "safety_tier": "moderate_vigorous",
+      "locked_states": ["pause_and_refer", "rest_state"],
+      "needs_weight": "imputed",
+      "confidence": "medium"
+    },
+    {
+      "id": "six_min_walk",
+      "game_name": "Watchtower Patrol",
+      "capacity": "aerobic_functional",
+      "protocol": "Walk back and forth on a measured flat loop for 6 minutes at your own fastest comfortable pace; rest allowed.",
+      "scoring": {
+        "reference_medians_m_age_40_80": {"male": 576, "female": 494},
+        "bands_vs_median_ratio": [
+          {"band": 1, "ratio_below": 0.7},
+          {"band": 2, "ratio_from": 0.7, "ratio_below": 0.9},
+          {"band": 3, "ratio_from": 0.9, "ratio_below": 1.1},
+          {"band": 4, "ratio_from": 1.1}
+        ],
+        "band_cutoffs_confidence": "low",
+        "note": "Enright reference equations require height and weight, so use medians + self-relative change"
+      },
+      "safety_tier": "moderate",
+      "locked_states": ["pause_and_refer", "rest_state"],
+      "needs_weight": false,
+      "sources": ["enright_1998", "rikli_jones_2013"],
+      "confidence": "medium"
+    },
+    {
+      "id": "pushup",
+      "game_name": "Shield Wall",
+      "capacity": "muscular_endurance_upper",
+      "protocol": "Maximum consecutive push-ups with good form, no rest; toes (standard) or knees (modified). Score each against its own table.",
+      "norms_csep_acsm": {
+        "categories": ["needs_improvement", "fair", "good", "very_good", "excellent"],
+        "male_toes": {
+          "20-29": {"good": [22, 28], "excellent_min": 36, "verified": true},
+          "30-39": {"good": [17, 21], "excellent_min": 30, "verified": true},
+          "40-49": {"good": [13, 16], "excellent_min": 25, "verified": false},
+          "50-59": {"good": [10, 12], "excellent_min": 21, "verified": false},
+          "60-69": {"good": [8, 10], "excellent_min": 18, "verified": false}
+        },
+        "female_knees": {
+          "20-29": {"good": [15, 20], "excellent_min": 30, "verified": true},
+          "30-39": {"good": [13, 19], "excellent_min": 27, "verified": true},
+          "40-49": {"good": [11, 14], "excellent_min": 24, "verified": false},
+          "50-59": {"good": [7, 10], "excellent_min": 21, "verified": false},
+          "60-69": {"good": [5, 11], "excellent_min": 17, "verified": false}
+        },
+        "category_to_band": {"needs_improvement": 1, "fair": 2, "good": 3, "very_good": 4, "excellent": 5},
+        "unverified_note": "Non-verified rows recalled from ACSM/CSEP tables; replace from primary CSEP-PATH manual before use"
+      },
+      "context": "Men >40 push-ups had IRR 0.04 (95% CI 0.01-0.36) for CVD events vs <10 (male firefighters)",
+      "safety_tier": "moderate_vigorous",
+      "locked_states": ["pause_and_refer", "rest_state"],
+      "locked_by_limitations": ["upper_body", "wheelchair_optional_ok"],
+      "sources": ["csep_path", "acsm_guidelines", "yang_2019"],
+      "confidence": "medium"
+    },
+    {
+      "id": "chair_stand",
+      "game_name": "Rise of the Squire",
+      "capacity": "muscular_strength_lower",
+      "protocol": "From a standard-height chair, arms crossed, count full stands in 30 seconds.",
+      "validity": {"test_retest_icc": {"male": 0.84, "female": 0.92}, "r_vs_leg_press": {"male": 0.78, "female": 0.71}},
+      "norms_normal_range_25_75pct_age_60plus": {
+        "male": {"60-64": [14, 19], "65-69": [12, 18], "70-74": [12, 17], "75-79": [11, 17], "80-84": [10, 15]},
+        "female": {"60-64": [12, 17], "65-69": [11, 16], "70-74": [10, 15], "75-79": [10, 15], "80-84": [9, 14]},
+        "verified": false,
+        "note": "Recalled Senior Fitness Test normal ranges; verify against Rikli & Jones primary source. Under 60: self-relative only."
+      },
+      "band_rule": "below range -> 2; within range -> 3; above range -> 4",
+      "safety_tier": "moderate",
+      "locked_states": ["pause_and_refer", "rest_state"],
+      "sources": ["jones_1999", "rikli_jones_2013"],
+      "confidence": "low"
+    },
+    {
+      "id": "sit_to_rise",
+      "game_name": "Kneel and Rise",
+      "capacity": "mobility",
+      "protocol": "From standing, sit down on the floor and stand back up using as little support as possible. Start with 5 points each for sitting and rising; subtract 1 for each hand, knee, forearm or leg-side support used and 0.5 for a noticeable loss of balance.",
+      "scoring": {"range": [0, 10], "categories": [[0, 3], [3.5, 5.5], [6, 7.5], [8, 10]], "category_to_band": {"0-3": 1, "3.5-5.5": 2, "6-7.5": 3, "8-10": 4}, "band5": "score 10 AND toe_touch"},
+      "evidence": "Ages 51-80: adjusted HR for mortality 5.44 (lowest vs highest category); each 1-point increase ~21% survival improvement",
+      "safety_tier": "light_moderate",
+      "locked_states": ["pause_and_refer", "prenatal_path"],
+      "locked_by_limitations": ["lower_body", "back_core", "mobility_aid", "wheelchair", "balance"],
+      "sources": ["brito_2014"],
+      "confidence": "high"
+    },
+    {
+      "id": "sit_and_reach",
+      "game_name": "Archer's Reach",
+      "capacity": "mobility",
+      "protocol": "Seated, legs straight, feet against a box or step; reach forward slowly and hold 2 s. Home score = cm beyond toes + 26 (CSEP box zero at 26 cm); negative if short of toes.",
+      "norms_csep_cm": {
+        "male": {
+          "20-29": {"excellent_min": 40, "very_good": [34, 39], "good": [30, 33], "fair": [25, 29], "needs_improvement_max": 24, "verified": "partial"},
+          "30-39": {"excellent_min": 38, "very_good": [33, 37], "good": [28, 32], "fair": [23, 27], "needs_improvement_max": 22, "verified": false},
+          "40-49": {"excellent_min": 35, "very_good": [29, 34], "good": [24, 28], "fair": [18, 23], "needs_improvement_max": 17, "verified": false},
+          "50-59": {"excellent_min": 35, "very_good": [28, 34], "good": [24, 27], "fair": [16, 23], "needs_improvement_max": 15, "verified": false},
+          "60-69": {"excellent_min": 33, "very_good": [25, 32], "good": [20, 24], "fair": [15, 19], "needs_improvement_max": 14, "verified": false}
+        },
+        "female": {
+          "20-29": {"excellent_min": 41, "very_good": [37, 40], "good": [33, 36], "fair": [28, 32], "needs_improvement_max": 27, "verified": "partial"},
+          "30-39": {"excellent_min": 41, "very_good": [36, 40], "good": [32, 35], "fair": [27, 31], "needs_improvement_max": 26, "verified": false},
+          "40-49": {"excellent_min": 38, "very_good": [34, 37], "good": [30, 33], "fair": [25, 29], "needs_improvement_max": 24, "verified": false},
+          "50-59": {"excellent_min": 39, "very_good": [33, 38], "good": [30, 32], "fair": [25, 29], "needs_improvement_max": 24, "verified": false},
+          "60-69": {"excellent_min": 35, "very_good": [31, 34], "good": [27, 30], "fair": [23, 26], "needs_improvement_max": 22, "verified": false}
+        },
+        "category_to_band": {"needs_improvement": 1, "fair": 2, "good": 3, "very_good": 4, "excellent": 5}
+      },
+      "safety_tier": "light",
+      "locked_by_limitations": ["back_core"],
+      "sources": ["csep_path"],
+      "confidence": "low"
+    },
+    {
+      "id": "wall_sit",
+      "game_name": "Gatekeeper's Stand",
+      "capacity": "muscular_endurance_lower",
+      "protocol": "Back against wall, knees ~90 degrees, hold as long as possible (stop at 3 min).",
+      "norms": null,
+      "scoring": "self-relative only: improvement vs personal best; no absolute band",
+      "note": "No robust peer-reviewed adult norms found",
+      "safety_tier": "moderate",
+      "locked_by_limitations": ["lower_body", "wheelchair", "mobility_aid"],
+      "confidence": "low"
+    },
+    {
+      "id": "talk_test",
+      "game_name": "Bard's Breath",
+      "capacity": "intensity_calibration",
+      "protocol": "During a gradually harder walk/jog/cycle, recite a short passage each few minutes; note when speaking first becomes uncertain (equivocal) and when it is no longer comfortable.",
+      "scoring": {"output": "personal moderate ceiling = pace/HR at last comfortable stage; equivocal stage ~ ventilatory threshold"},
+      "safety_tier": "any (stop at first equivocal stage for gentle/prenatal paths)",
+      "sources": ["persinger_2004"],
+      "confidence": "high"
+    }
+  ],
+
+  "history_inference_rules": {
+    "eligibility": {"min_weeks": 4, "max_weeks": 12, "min_sessions": 6},
+    "recency_weighting": {"method": "EWMA", "time_constant_days": {"low": 21, "mid": 28, "high": 42, "sources": ["strava_ff", "design"]}},
+    "gap_handling": {"days_since_last_activity_trigger": 14, "action": "apply R1 detraining decay before assigning bands"},
+    "aerobic_priority": [
+      {
+        "method": "device_vo2max",
+        "rule": "median of latest 3 device estimates within 42 days",
+        "se": {"low": 5.0, "mid": 7.0, "high": 9.0, "sources": ["molina_garcia_2022", "lambe_2025", "lambe_2026"]},
+        "apple_bias_adjustment": {"low": 0.0, "mid": 3.0, "high": 6.0, "sources": ["lambe_2025", "lambe_2026"], "note": "Apple underestimated by ~6 in two small studies; mid applies half; review"},
+        "note": "Apple uses user's own profile weight internally; HealthRPG receives only the VO2max value"
+      },
+      {
+        "method": "pace_hr_regression",
+        "segment_filter": {"min_duration_s": 300, "max_abs_grade_pct": 2, "hr_stable_cv_max": 0.05, "exclude_first_s": 300},
+        "vo2_from_speed": {"walking": "0.1*v + 1.8*v*grade + 3.5", "running": "0.2*v + 0.9*v*grade + 3.5", "v_units": "m/min", "grade_units": "fraction", "source": "ACSM metabolic equations", "walk_run_switch_m_per_min": {"low": 100, "mid": 110, "high": 134, "sources": ["acsm_guidelines", "design"]}},
+        "fit": "linear VO2 ~ HR across segments",
+        "hrmax": "max(208 - 0.7*age, observed max HR in history, excluding artifacts)",
+        "requirements": {"min_segments": 3, "min_hrr_span_fraction": 0.15, "min_r": 0.7},
+        "se": {"low": 4.5, "mid": 6.0, "high": 8.0, "sources": ["firstbeat_2017", "tanaka_2001", "design"]}
+      },
+      {
+        "method": "best_effort",
+        "rules": ["best 12-min continuous distance -> Cooper equation", "best >= 3 km run -> race-performance VO2 estimate (Daniels; medium confidence)"],
+        "se": {"low": 3.5, "mid": 5.0, "high": 7.0, "sources": ["cooper_1968", "design"]}
+      },
+      {"method": "questionnaire_fallback", "rule": "nonexercise_vo2max_model"}
+    ],
+    "muscular_endurance_from_volume": {
+      "metric": "chronic weekly MVPA minutes (28-day)",
+      "bands": [
+        {"band": 1, "min_below": 60},
+        {"band": 2, "min_from": 60, "min_below": 150},
+        {"band": 3, "min_from": 150, "min_below": 300},
+        {"band": 4, "min_from": 300, "min_below": 450},
+        {"band": 5, "min_from": 450}
+      ],
+      "anchors": "WHO 150/300 min thresholds",
+      "long_quest_duration_ceiling_multiplier_of_longest_28d_session": {"low": 1.1, "mid": 1.15, "high": 1.25, "sources": ["nielsen_2014", "design"]},
+      "confidence": "low",
+      "sources": ["who_2020", "design"]
+    },
+    "muscular_strength_from_history": {
+      "metric": "strength sessions per week (28-day avg)",
+      "bands": [
+        {"band": 1, "sessions_below": 0.25},
+        {"band": 2, "sessions_from": 0.25, "sessions_below": 1},
+        {"band": 3, "sessions_from": 1, "sessions_below": 2},
+        {"band": 4, "sessions_from": 2, "requires_weeks_sustained": 8}
+      ],
+      "band5": "requires trial",
+      "load_tracking": "self-relative e1RM trend via Epley (load*(1+reps/30)); no relative strength (needs body mass)",
+      "confidence": "low",
+      "sources": ["who_2020", "design"]
+    },
+    "mobility_from_history": {"rule": "+0.5 band prior if >= 2 yoga/mobility sessions per week; otherwise rely on onboarding/trials", "confidence": "low"},
+    "progression_guard": {
+      "week1_volume_cap_fraction_of_chronic": {"low": 1.0, "mid": 1.1, "high": 1.2, "sources": ["nielsen_2014", "buist_2008", "design"]},
+      "weekly_increase_warning_fraction": {"low": 0.1, "mid": 0.2, "high": 0.3, "sources": ["nielsen_2014", "buist_2008"]},
+      "acwr": "do not use as injury predictor (no causal support)",
+      "cross_reference": "R3 safe progression",
+      "sources": ["impellizzeri_2020", "gabbett_2016"]
+    },
+    "strava_fitness_note": "Strava Fitness is an impulse-response training-load score (Relative Effort / power Training Load), not VO2max; use only for chronic load",
+    "confidence_score": {
+      "inputs": ["n_sessions", "hr_coverage_fraction", "method_used", "weeks_covered"],
+      "labels": {"rough": "questionnaire only or <6 sessions", "solid": "device VO2max or history with >=6 sessions", "sharp": "trial within 30 days or pace-HR fit r>=0.85"}
+    }
+  },
+
+  "initial_capacity_algorithm": {
+    "steps": [
+      "state = safety_screen.rule(safety, age_band, activity_level)",
+      "age = age_midpoint; sex = model_sex_value; bmi = bmi_imputation[sex][age_band]",
+      "est_q = Jackson1990(PA_R, age, bmi, sex); se_q = total_se_with_imputation[sex].mid",
+      "if device resting HR: est_u = Uth(PF[sex], 208-0.7*age, RHR); blend inverse-variance",
+      "override with history/trial estimate when its SE is smaller",
+      "clamp [12,70]; display_band = band(FRIEND_pct(est)); prescribed_band = band(FRIEND_pct(est - 0.5*se))",
+      "apply safety state caps (gentle/prenatal <=2; pause_and_refer = 1)",
+      "strength/endurance/mobility from activity_level_to_capacity_bands rules; history overrides",
+      "apply limitation filters; recalibrate after 2 weeks from quest RPE feedback"
+    ],
+    "worked_examples": [
+      {"input": {"age_band": "30-39", "sex": "male", "PA_R": 3}, "bmi_imputed": 25.8, "est": 40.3, "friend_pct_approx": "~40th", "display_band": 2, "note": "prescribed uses est-3.45=36.9 -> ~25th -> band 2"},
+      {"input": {"age_band": "30-39", "sex": "female", "PA_R": 3}, "bmi_imputed": 26.1, "est": 29.1, "friend_pct_approx": "~45th", "display_band": 2}
+    ],
+    "confidence": "low"
+  },
+
+  "references": {
+    "parq_2025_form": "PAR-Q+ Collaboration. PAR-Q+ 2025 (form dated 01-11-2024). https://eparmedx.com/wp-content/uploads/2025/01/PARQPlus2025Fillable.pdf",
+    "parq_terms": "PAR-Q+ Collaboration. Terms and Conditions. https://eparmedx.com/?page_id=746",
+    "warburton_2011": "Warburton DE et al. Evidence-based risk assessment and recommendations for physical activity clearance: Consensus Document 2011. Appl Physiol Nutr Metab 2011;36(S1):S266-98. doi:10.1139/h11-062",
+    "riebe_2015": "Riebe D et al. Updating ACSM's recommendations for exercise preparticipation health screening. Med Sci Sports Exerc 2015;47(11):2473-9. doi:10.1249/MSS.0000000000000664",
+    "jackson_1990": "Jackson AS et al. Prediction of functional aerobic capacity without exercise testing. Med Sci Sports Exerc 1990;22(6):863-70. doi:10.1249/00005768-199012000-00021",
+    "wier_2006": "Wier LT et al. Nonexercise models for estimating VO2max with waist girth, percent fat, or BMI. Med Sci Sports Exerc 2006;38(3):555-61.",
+    "nes_2011": "Nes BM et al. Estimating VO2peak from a nonexercise prediction model: the HUNT Study, Norway. Med Sci Sports Exerc 2011;43(11):2024-30. doi:10.1249/MSS.0b013e31821d3f6f",
+    "nes_2014": "Nes BM et al. A simple nonexercise model of cardiorespiratory fitness predicts long-term mortality. Med Sci Sports Exerc 2014;46(6):1159-65.",
+    "nauman_2012": "Nauman J et al. A prospective population study of resting heart rate and peak oxygen uptake (HUNT). PLoS ONE 2012;7(9):e45021.",
+    "peterman_2020": "Peterman JE et al. Accuracy of nonexercise prediction equations for assessing longitudinal changes to CRF: BALL ST cohort. J Am Heart Assoc 2020;9:e015117. doi:10.1161/JAHA.119.015117",
+    "uth_2004": "Uth N et al. Estimation of VO2max from the ratio between HRmax and HRrest. Eur J Appl Physiol 2004;91(1):111-5.",
+    "uth_2005": "Uth N. Gender difference in the proportionality factor... Int J Sports Med 2005;26(9):763-7.",
+    "tanaka_2001": "Tanaka H, Monahan KD, Seals DR. Age-predicted maximal heart rate revisited. J Am Coll Cardiol 2001;37(1):153-6.",
+    "kaminsky_2015": "Kaminsky LA, Arena R, Myers J. Reference standards for CRF measured with CPX: FRIEND. Mayo Clin Proc 2015;90(11):1515-23. PMC4919021",
+    "kaminsky_2022": "Kaminsky LA et al. Updated reference standards for CRF (FRIEND). Mayo Clin Proc 2022;97(2):285-93.",
+    "schembre_2011": "Schembre SM, Riebe DA. Non-exercise estimation of VO2max using the IPAQ. Meas Phys Educ Exerc Sci 2011;15(3):168-81.",
+    "craig_2003": "Craig CL et al. IPAQ: 12-country reliability and validity. Med Sci Sports Exerc 2003;35(8):1381-95.",
+    "lee_2011": "Lee PH et al. Validity of the IPAQ-SF: a systematic review. Int J Behav Nutr Phys Act 2011;8:115.",
+    "ipaq_faq": "IPAQ FAQ (CC BY 4.0). https://sites.google.com/view/ipaq/faq",
+    "godin_1985": "Godin G, Shephard RJ. A simple method to assess exercise behavior in the community. Can J Appl Sport Sci 1985;10(3):141-6.",
+    "godin_2011": "Godin G. The Godin-Shephard LTPAQ. Health Fitness J Can 2011;4(1):18-22. doi:10.14288/hfjc.v4i1.82",
+    "taylor_piliae_2006": "Taylor-Piliae RE et al. Validation of a new brief physical activity survey among men and women aged 60-69 years. Am J Epidemiol 2006;164(6):598-606.",
+    "milton_2011": "Milton K, Bull FC, Bauman A. Reliability and validity testing of a single-item physical activity measure. Br J Sports Med 2011;45(3):203-8.",
+    "coleman_2012": "Coleman KJ et al. Initial validation of an exercise 'vital sign' in electronic medical records. Med Sci Sports Exerc 2012;44(11):2071-6.",
+    "cooper_1968": "Cooper KH. A means of assessing maximal oxygen intake. JAMA 1968;203(3):201-4.",
+    "kline_1987": "Kline GM et al. Estimation of VO2max from a one-mile track walk, gender, age, and body weight. Med Sci Sports Exerc 1987;19(3):253-9.",
+    "enright_1998": "Enright PL, Sherrill DL. Reference equations for the six-minute walk in healthy adults. Am J Respir Crit Care Med 1998;158(5):1384-7.",
+    "yang_2019": "Yang J et al. Push-up exercise capacity and future CVD events among active adult men. JAMA Netw Open 2019;2(2):e188341.",
+    "jones_1999": "Jones CJ, Rikli RE, Beam WC. A 30-s chair-stand test... Res Q Exerc Sport 1999;70(2):113-9.",
+    "rikli_jones_2013": "Rikli RE, Jones CJ. Criterion-referenced fitness standards for maintaining physical independence in later years. Gerontologist 2013;53(2):255-67.",
+    "brito_2014": "Brito LB et al. Ability to sit and rise from the floor as a predictor of all-cause mortality. Eur J Prev Cardiol 2014;21(7):892-8.",
+    "persinger_2004": "Persinger R et al. Consistency of the talk test for exercise prescription. Med Sci Sports Exerc 2004;36(9):1632-6.",
+    "csep_path": "CSEP. CSEP-PATH Resource Manual (norms; not retrieved directly).",
+    "acsm_guidelines": "ACSM's Guidelines for Exercise Testing and Prescription, 11th ed., 2021 (not retrieved).",
+    "molina_garcia_2022": "Molina-Garcia P et al. Validity of estimating VO2max by consumer wearables: meta-analysis (INTERLIVE). Sports Med 2022;52(7):1577-97.",
+    "lambe_2025": "Lambe R et al. Investigating the accuracy of Apple Watch VO2 max measurements. PLoS ONE 2025;20(5):e0323741.",
+    "lambe_2026": "Lambe R et al. Accuracy of VO2 max estimates from Apple Watch Series 10. Mayo Clin Proc Digit Health 2026;4(2):100357.",
+    "apple_cardio": "Apple Support: Track your cardio fitness levels. https://support.apple.com/en-us/108790",
+    "firstbeat_2017": "Firstbeat. Automated Fitness Level (VO2max) Estimation with Heart Rate and Speed Data (white paper, 2017).",
+    "strava_ff": "Strava Support: How Fitness & Freshness is calculated. https://support.strava.com/hc/en-us/articles/216918477-Fitness-Freshness",
+    "nielsen_2014": "Nielsen RO et al. Excessive progression in weekly running distance and risk of running-related injuries. J Orthop Sports Phys Ther 2014;44(10):739-47.",
+    "buist_2008": "Buist I et al. No effect of a graded training program on running-related injuries in novice runners. Am J Sports Med 2008;36(1):33-9.",
+    "impellizzeri_2020": "Impellizzeri FM et al. Acute:chronic workload ratio: conceptual issues and fundamental pitfalls. Int J Sports Physiol Perform 2020;15(6):907-13.",
+    "gabbett_2016": "Gabbett TJ. The training-injury prevention paradox. Br J Sports Med 2016;50(5):273-80.",
+    "who_2020": "Bull FC et al. WHO 2020 guidelines on physical activity and sedentary behaviour. Br J Sports Med 2020;54(24):1451-62 (not re-retrieved).",
+    "acog_804": "ACOG Committee Opinion No. 804. Obstet Gynecol 2020;135(4):e178-88 (not re-retrieved).",
+    "mottola_2018": "Mottola MF et al. 2019 Canadian guideline for physical activity throughout pregnancy. Br J Sports Med 2018;52(21):1339-46 (not re-retrieved).",
+    "topend_nonexercise": "Topend Sports. Non-exercise fitness test. https://www.topendsports.com/testing/tests/non-exercise.htm (secondary)",
+    "design": "HealthRPG design judgement (this report); requires validation",
+    "derived": "Computed in this report from cited source data"
+  }
+}
