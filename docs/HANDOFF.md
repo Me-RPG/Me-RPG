@@ -3,7 +3,7 @@
 Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](ENGINEERING_PLAN.md). This file records what was actually built, what was decided along the way, and what is next.
 
 **Location:** `%USERPROFILE%\OneDrive\Documents\Projects\HealthRPG` (not Desktop\HealthRPG, which is an empty launch folder).
-**Git:** first commit `4b5572a` on `master`, no remote. Author is set in the repo config (Cameron). Commit only when the user asks.
+**Git:** branch `main`, remote `origin` = public repo https://github.com/Me-RPG/Me-RPG (no license: all rights reserved). The org belongs to the `cdchandev` GitHub account, not `cameronablaze`. The author is set in the repo config (Cameron). Commit and push only when the user asks.
 **Health:** 82 tests pass (`npm test`); `npm run typecheck` and `npm run lint` are clean; `expo-doctor` passes 21/21.
 
 ---
@@ -72,6 +72,7 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 ## 3. Decisions made (don't re-litigate)
 - **Stack:** Expo/React Native, Supabase, npm workspaces (pnpm is not installed).
 - **Platforms (2026-09-29): ship Android and Web first. iOS is postponed**, along with HealthKit, Sign in with Apple and the Apple Developer account. Keep code cross-platform, but don't build or test for iOS yet.
+- **Name (2026-09-29): the project is renamed "Me RPG"** to fit the planned shift beyond fitness to personal improvement in general (see Future). The code, packages and docs still say HealthRPG until a rename pass is done.
 - **User communications are postponed (2026-09-29):** no custom SMTP, branded emails or other player messaging yet. Sign-in keeps the email one-time code, sent through Supabase's built-in mailer, for development only.
 - **v1 scope:**
   - **No onboarding safety screen** (a v2 feature).
