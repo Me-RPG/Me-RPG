@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
 import type { GameEvent } from "@healthrpg/engine";
-import type { EventStore } from "./storage.types";
+import { UNLINKED, type EventStore, type SyncMeta } from "./storage.types";
 
 /**
  * Native event store: an append-only table in on-device SQLite. The event log
@@ -32,8 +32,26 @@ export const eventStore: EventStore = {
   },
   async append(event, rules) {
     const d = await db();
-    await d.runAsync("INSERT INTO events (seq, body) VALUES (?, ?)", event.seq, JSON.stringify(event));
+    // OR REPLACE: a sync may already have written this seq while the append was queued.
+    await d.runAsync("INSERT OR REPLACE INTO events (seq, body) VALUES (?, ?)", event.seq, JSON.stringify(event));
     await d.runAsync("INSERT OR REPLACE INTO meta (key, value) VALUES ('rules', ?)", rules);
+  },
+  async replace(events, rules) {
+    const d = await db();
+    await d.withTransactionAsync(async () => {
+      await d.runAsync("DELETE FROM events");
+      for (const e of events) await d.runAsync("INSERT INTO events (seq, body) VALUES (?, ?)", e.seq, JSON.stringify(e));
+      await d.runAsync("INSERT OR REPLACE INTO meta (key, value) VALUES ('rules', ?)", rules);
+    });
+  },
+  async getSync() {
+    const d = await db();
+    const row = await d.getFirstAsync<{ value: string }>("SELECT value FROM meta WHERE key = 'sync'");
+    return row ? { ...UNLINKED, ...(JSON.parse(row.value) as Partial<SyncMeta>) } : UNLINKED;
+  },
+  async setSync(meta) {
+    const d = await db();
+    await d.runAsync("INSERT OR REPLACE INTO meta (key, value) VALUES ('sync', ?)", JSON.stringify(meta));
   },
   async clear() {
     const d = await db();

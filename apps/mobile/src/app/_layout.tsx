@@ -6,6 +6,7 @@ import { useFonts, Cinzel_400Regular, Cinzel_700Bold } from "@expo-google-fonts/
 import { EBGaramond_400Regular, EBGaramond_400Regular_Italic, EBGaramond_600SemiBold } from "@expo-google-fonts/eb-garamond";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useGame } from "../game/store";
+import { useAccount } from "../sync/account";
 import { color, font } from "../ui/theme";
 import { Body, Button, Card, Screen, Title } from "../ui/components";
 
@@ -17,6 +18,8 @@ export default function RootLayout() {
   useEffect(() => {
     void hydrate();
   }, [hydrate]);
+
+  useEffect(() => useAccount.getState().init(), []);
 
   if (!fontsLoaded || status === "loading") {
     return (
@@ -43,6 +46,7 @@ export default function RootLayout() {
           <Stack.Screen name="onboarding" options={{ headerShown: false }} />
           <Stack.Screen name="log" options={{ presentation: "modal", title: "Log a workout" }} />
           <Stack.Screen name="start" options={{ presentation: "modal", title: "Choose your quest" }} />
+          <Stack.Screen name="account" options={{ presentation: "modal", title: "Account" }} />
           <Stack.Screen name="battle/[id]" options={{ title: "Battle", headerBackVisible: false, gestureEnabled: false }} />
         </Stack>
       )}

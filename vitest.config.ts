@@ -10,6 +10,6 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["packages/*/test/**/*.test.ts", "apps/mobile/src/game/**/*.test.ts"],
+    include: ["packages/*/test/**/*.test.ts", "apps/mobile/src/**/*.test.ts"],
   },
 });

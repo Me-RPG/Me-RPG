@@ -31,6 +31,8 @@ interface GameStore {
   dismissNotice(id: string): void;
   clearError(): void;
   resetSave(): Promise<void>;
+  /** Swap in a whole log (pulled from or merged with the server). Throws, changing nothing, if it doesn't replay. */
+  replaceLog(events: GameEvent[]): Promise<void>;
 }
 
 const realToday = () => Math.floor(Date.now() / 86_400_000);
@@ -83,5 +85,11 @@ export const useGame = create<GameStore>((set, get) => ({
   async resetSave() {
     await eventStore.clear();
     set({ events: [], state: initialState(), notices: [], status: "ready", incompatibleReason: null });
+  },
+
+  async replaceLog(events) {
+    const state = replay(events, CTX);
+    await eventStore.replace(events, RULES_VERSION);
+    set({ events, state, notices: [], lastError: null, status: "ready", incompatibleReason: null });
   },
 }));

@@ -3,6 +3,7 @@ import { TextInput, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { baselineFromOnboarding, type AgeBand, type SexForNorms } from "@healthrpg/fitness-model";
 import { useGame } from "../game/store";
+import { useAccount } from "../sync/account";
 import { GameAsset } from "../ui/GameAsset";
 import { Body, Button, Card, Chip, Label, Row, Screen, Title } from "../ui/components";
 import { color, font, radius } from "../ui/theme";
@@ -22,6 +23,7 @@ const ACTIVITY: [number, string][] = [
 /** Low-intrusion onboarding (research/r5): no weight, height or location. Safety screen is a v2 feature. */
 export default function Onboarding() {
   const dispatch = useGame((s) => s.dispatch);
+  const accountsOn = useAccount((s) => s.status !== "unconfigured");
   const [name, setName] = useState("");
   const [age, setAge] = useState<AgeBand>("30-39");
   const [sex, setSex] = useState<SexForNorms>("unspecified");
@@ -78,6 +80,7 @@ export default function Onboarding() {
       </Card>
 
       <Button testID="begin" title="Begin the journey" onPress={begin} />
+      {accountsOn ? <Button kind="secondary" testID="restore" title="Already have a hero? Sign in" onPress={() => router.push("/account")} /> : null}
     </Screen>
   );
 }

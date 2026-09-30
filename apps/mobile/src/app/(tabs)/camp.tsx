@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { View } from "react-native";
+import { router } from "expo-router";
 import { heroSheet } from "../../game/selectors";
 import { today, useGame } from "../../game/store";
+import { syncLine, useAccount } from "../../sync/account";
 import { GameAsset } from "../../ui/GameAsset";
 import { Body, Button, Card, Label, Row, Screen, Title } from "../../ui/components";
 
@@ -15,6 +17,9 @@ export default function Camp() {
   const state = useGame((s) => s.state);
   const dispatch = useGame((s) => s.dispatch);
   const resetSave = useGame((s) => s.resetSave);
+  const syncStatus = useAccount((s) => s.status);
+  const unsynced = useAccount((s) => s.unsynced);
+  const signedIn = useAccount((s) => s.session !== null);
   const [confirmReset, setConfirmReset] = useState(false);
   const st = heroSheet(state);
   const day = today(state);
@@ -38,6 +43,14 @@ export default function Camp() {
         {st.inSanctuary
           ? <Button testID="leave-sanctuary" title="Leave the Sanctuary" onPress={() => dispatch({ type: "SanctuaryExited" })} />
           : <Button testID="enter-sanctuary" kind="secondary" title="Enter the Sanctuary" onPress={() => dispatch({ type: "SanctuaryEntered", reason: "other" })} />}
+      </Card>
+
+      <Card>
+        <Title size={18}>Account</Title>
+        <Body muted>{syncLine(syncStatus, unsynced)}</Body>
+        {syncStatus !== "unconfigured" ? (
+          <Button testID="account" kind="secondary" title={signedIn ? "Account & sync" : "Sign in"} onPress={() => router.push("/account")} />
+        ) : null}
       </Card>
 
       <Card>

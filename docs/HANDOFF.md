@@ -3,8 +3,8 @@
 Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](ENGINEERING_PLAN.md). This file records what was actually built, what was decided along the way, and what is next.
 
 **Location:** `%USERPROFILE%\OneDrive\Documents\Projects\HealthRPG` (not Desktop\HealthRPG, which is an empty launch folder).
-**Git:** initialized, **no commits by user choice**. Everything is local.
-**Health:** 77 tests pass (`npm test`); `npm run typecheck` and `npm run lint` are clean; `expo-doctor` passes 21/21.
+**Git:** first commit `4b5572a` on `master`, no remote. Author is set in the repo config (Cameron). Commit only when the user asks.
+**Health:** 82 tests pass (`npm test`); `npm run typecheck` and `npm run lint` are clean; `expo-doctor` passes 21/21.
 
 ---
 
@@ -19,7 +19,7 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 | 4 Balance simulator | Done | `apps/sim/src/balance.ts` → `outputs/balance/report.html` |
 | Classes (added) | Done: Ranger / Berserker / Warrior | `packages/content/src/classes.ts`, `packages/engine/src/classes.ts` |
 | 5 Mobile shell | Done, **verified in the browser (Expo web) only** | `apps/mobile` |
-| **6 Accounts + sync (Supabase)** | **Next.** Waiting on items in section 7 | — |
+| **6 Accounts + sync (Supabase)** | **In progress.** App side built; migration written but **not yet applied**. See section 7 | `supabase/`, `apps/mobile/src/sync` |
 | 7 HealthKit / Health Connect | Not started | — |
 | 8 Strava | Not started (heavy API restrictions, see R7) | — |
 | 9 Trails (OSM/Overpass; AllTrails not viable) | Not started | — |
@@ -72,7 +72,7 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 ## 3. Decisions made (don't re-litigate)
 - **Stack:** Expo/React Native, Supabase, npm workspaces (pnpm is not installed).
 - **v1 scope:**
-  - **No onboarding safety screen** (a v2 feature) and no commits.
+  - **No onboarding safety screen** (a v2 feature).
   - High-stakes battles; only long-term players should suspect they can't lose.
   - Classes by fitness style, non-exclusive.
 - **Integration order** (from R7): HealthKit/Health Connect → OSM trails → Mapy → Garmin → Google Health API → Strava (last; owner-only display, no AI use, 7-day cache).
@@ -100,6 +100,8 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 ## 5. Gotchas
 - **Metro and `.js` suffixes:** the shared packages use Node-style `.js` import suffixes. `apps/mobile/metro.config.js` maps them to `.ts`.
 - **OneDrive:** Metro's file watcher can miss edits in this folder. Restart with `npx expo start --clear`.
+- **Env vars:** `EXPO_PUBLIC_*` values are inlined when Metro starts; restart the dev server after changing `.env.local`.
+- **Preview server:** `.claude/launch.json` defines `mobile-web` for the browser pane.
 - **Typecheck scope:** the root `tsconfig.json` excludes `apps/mobile`, which has its own JSX tsconfig; `npm run typecheck` runs both.
 - **Shell scripting:** heredocs containing quotes have broken several times in this Git Bash. Prefer the Write/Edit tools for multi-line code.
 - **Screenshots:** Browser-pane screenshots of the Expo web app time out intermittently; `get_page_text` and `find` work. Serve static HTML via localhost to screenshot it (the `file://` pane can't be captured).
@@ -119,18 +121,35 @@ npm run mobile                                 # Expo dev server for device/simu
 ```
 
 ## 7. Phase 6 (Supabase) — status and what's needed
-- **Have:** project URL `https://gebeanamnzbomxjrlvwh.supabase.co` (project ref `gebeanamnzbomxjrlvwh`).
-- **Need from the user:**
-  1. **The publishable/anon key.** It is public by design and goes in `apps/mobile/.env.local` as `EXPO_PUBLIC_SUPABASE_URL` / `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. **Never** take the service_role key or the DB password in chat.
-  2. **The user runs** `npx supabase login` and `npx supabase link --project-ref gebeanamnzbomxjrlvwh` (the link step prompts for the DB password in their terminal).
-  3. **Sign-in methods:** recommended email OTP/magic link first. Apple needs an Apple Developer account (asked; no answer yet). Google needs a Google Cloud OAuth client.
-  4. **The project region** (an EU region eases GDPR).
-  5. **Auth redirect URLs** added in the dashboard: `healthrpg://**` and `http://localhost:8081/**`.
-- **Plan** (see the plan, Phase 6):
-  - `supabase/migrations`: profiles, events (append-only, per-user seq), connections, content_versions, with RLS so each user reads and writes only their own rows;
-  - sync: push local events, pull missing ones;
-  - `supabase/functions/replay-validate`: the engine in Deno, recomputing the state hash;
-  - in-app account deletion plus data export (App Store / GDPR requirement, from R8).
+- **Project:** `https://gebeanamnzbomxjrlvwh.supabase.co` (ref `gebeanamnzbomxjrlvwh`). The publishable key is in `apps/mobile/.env.local` (gitignored; template in `.env.example`). **Never** take the service_role/secret key or the DB password in chat.
+- **Project auth settings (read 2026-09-29):** email sign-in on, signups open, email confirmation required; Apple, Google and anonymous sign-in off.
+- **Built:**
+  - `supabase/migrations/20260929000000_accounts_and_sync.sql` defines these tables:
+    - `profiles` (auto-created by a signup trigger);
+    - `characters` (one row per hero/save, with a device-generated uuid);
+    - `events` (append-only, keyed `(character_id, seq)`).
+  - RLS is read-own-rows only; clients cannot write tables directly.
+  - `push_events()` is security definer. It checks ownership, accepts retried pushes, returns 409 (`PT409`) for a changed event and rejects gaps.
+  - `delete_account()` deletes the auth user, which cascades to everything they own.
+  - The migration was tested against PGlite with stub `auth` schema and roles: 23 checks covering two-user isolation, append-only rules and the deletion cascade. It has **not** run on the real project yet.
+  - `apps/mobile/src/sync/`:
+    - `supabase.ts`: the client; its session lives in expo-sqlite localStorage.
+    - `plan.ts`: pure sync planning, tested. It handles push, pull, and rebasing local-only events after the server's when two devices diverged; events the engine refuses are dropped and reported.
+    - `remote.ts`: the server calls.
+    - `account.ts`: a zustand store with debounced single-flight sync, triggered on each new event, on sign-in and on app foreground.
+    - `exportFile(.web).ts`: data export (native share sheet; download on web).
+  - `src/app/account.tsx`: email one-time-code sign-in, sync status, heroes on the account (with "Play this hero" to restore on a new device), export and delete. It's linked from Camp and from onboarding ("Already have a hero?").
+  - Each save records which account owns it and is never pushed into another account. "Start over" unlinks the save, and the next hero becomes a new server hero.
+- **Needs the user:**
+  1. Apply the migration: `npx supabase login`, `npx supabase link --project-ref gebeanamnzbomxjrlvwh` (prompts for the DB password in their terminal), `npx supabase db push`. Alternatively, paste the SQL file into the dashboard SQL editor.
+  2. Email templates (Authentication → Emails): add `{{ .Token }}` to **Magic Link** and **Confirm signup**. The app signs in with the code, not the link.
+  3. Built-in email only delivers to the project's team members and is rate-limited; set up custom SMTP before beta.
+  4. Still open: Apple sign-in (needs an Apple Developer account), Google (needs an OAuth client), the project region (EU eases GDPR). Redirect URLs are only needed once magic links or OAuth are added.
+- **Not done yet:**
+  - `supabase/functions/replay-validate` (engine in Deno, recomputing the state hash) and `content_versions`, which it needs;
+  - `connections` (provider tokens in Vault), to be added with the first integration;
+  - verifying `delete_account()` on the real project. If the `postgres` role can't delete from `auth.users` there, switch to an edge function using the admin API;
+  - a two-device sync test on real hardware.
 
 ## 8. File inventory (excluding node_modules and generated output)
 - **Root:** `package.json` (workspaces + scripts), `tsconfig.base.json`, `tsconfig.json`, `vitest.config.ts`, `eslint.config.mjs`, `.github/workflows/ci.yml`, `README.md`, `docs/ENGINEERING_PLAN.md`, `docs/HANDOFF.md`, `CLAUDE.md`.
@@ -144,6 +163,7 @@ npm run mobile                                 # Expo dev server for device/simu
   - R7 integrations
   - R8 ethics and compliance
 - **scripts/build-params.mjs:** research → `params.v1.json`.
+- **supabase/migrations:** `20260929000000_accounts_and_sync.sql` (schema, RLS, `push_events`, `delete_account`).
 - **packages/fitness-model:** `data/params.v1.json` (in use), `data/params.v0.json` (old placeholder, unused, deletable), `src/{types,params,load,onboarding,index}.ts`, `test/load.test.ts`.
 - **packages/content/src:**
   - `types.ts`, `families.ts`, `archetypes.ts` (8 quest types), `routines.ts` (5 routines)
@@ -158,11 +178,12 @@ npm run mobile                                 # Expo dev server for device/simu
   - tests: `test/{engine,quests,battle,classes}.test.ts`
 - **apps/sim/src:** `play.ts`, `plan.ts`, `balance.ts`, `report.ts`.
 - **apps/mobile:**
-  - config: `app.json`, `metro.config.js`, `package.json`, `tsconfig.json`, `AGENTS.md` (Expo template's agent guide: always check the versioned Expo docs)
+  - config: `app.json`, `metro.config.js`, `package.json`, `tsconfig.json`, `.env.example` (`.env.local` holds the real values, gitignored), `AGENTS.md` (Expo template's agent guide: always check the versioned Expo docs)
   - routes, in `src/app/`:
-    - `_layout.tsx`, `index.tsx`, `onboarding.tsx`, `log.tsx`, `start.tsx`, `battle/[id].tsx`
+    - `_layout.tsx`, `index.tsx`, `onboarding.tsx`, `log.tsx`, `start.tsx`, `account.tsx`, `battle/[id].tsx`
     - `(tabs)/{_layout,quests,hero,chronicle,camp}.tsx`
   - game: `src/game/{store,announce,selectors,storage,storage.web,storage.types,game.test}.ts`
+  - sync: `src/sync/{supabase,plan,plan.test,remote,account,exportFile,exportFile.web}.ts`
   - UI and assets: `src/ui/{theme.ts,components.tsx,GameAsset.tsx}`, `src/assets/manifest.ts`
   - E2E: `.maestro/*.yaml`
   - unused template files: `App.tsx`, `index.ts` (deletable)
