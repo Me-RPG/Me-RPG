@@ -1,4 +1,4 @@
-import type { ActivityType } from "@healthrpg/fitness-model";
+import type { ActivityType } from "@me-rpg/fitness-model";
 import type { AbilityDef } from "./abilities.js";
 import type { BossDef } from "./bosses.js";
 import type { ClassDef, ClassId } from "./classes.js";

@@ -1,4 +1,4 @@
-# R8: Ethical Gamification and Compliance (HealthRPG)
+# R8: Ethical Gamification and Compliance (Me RPG)
 
 **Status:** 0.1.0-unreviewed research draft. Compiled 2026-09-28.
 
@@ -13,7 +13,7 @@ Citations are numbered [n] and listed at the end with URLs.
 
 ## 0. Executive summary
 1. Gamification increases physical activity by a small-to-moderate amount, and the effect shrinks after the intervention ends. The best-documented harms are broken-streak demotivation, reduced enjoyment from quantification, punishment backlash, and associations between tracking (especially calorie tracking) and disordered eating and compulsive exercise. Most of the harm evidence is cross-sectional.
-2. HealthRPG can stay a general wellness product (FDA) and non-medical software (EU MDR) if its intended purpose, marketing, and in-app copy stay on fitness and a healthy lifestyle, never name diseases, and avoid diagnostic thresholds or treatment framing.
+2. Me RPG can stay a general wellness product (FDA) and non-medical software (EU MDR) if its intended purpose, marketing, and in-app copy stay on fitness and a healthy lifestyle, never name diseases, and avoid diagnostic thresholds or treatment framing.
 3. The biggest legal exposure is privacy, not device regulation. Workout data is health data under GDPR Art. 9 when it is used to assess fitness, and it is almost certainly "consumer health data" under Washington's MHMDA, which carries a private right of action. The FTC's Health Breach Notification Rule likely covers the app as a PHR vendor because it draws from several sources (HealthKit, Health Connect, Strava, and user entry).
 4. The platforms add hard rules. There can be no advertising, marketing, or data-mining use of HealthKit or Health Connect data. Apple forbids storing personal health information in iCloud. In-app account deletion is required on iOS, and Google requires a web deletion link. Google also requires a Health apps declaration and an accurate Data safety form. Strava allows its data to be shown only to the user it belongs to.
 5. The recommended launch age is 16+ in all regions (medium confidence).
@@ -76,7 +76,7 @@ Citations are numbered [n] and listed at the end with URLs.
 - Two-factor test: intended only for general wellness, and low risk. (High) [21][22]
 - Two claim categories: (a) general health or fitness with no disease reference; (b) healthy lifestyle reducing the risk of well-understood chronic diseases. (High) [23]
 - New in 2026: non-invasive estimates of physiologic parameters are allowed. HCP-consult prompts are allowed if they do not name diseases, flag values as abnormal, give thresholds, or direct management. (Medium-High) [22][23]
-- HealthRPG fits category (a). Avoid category (b). (Medium)
+- Me RPG fits category (a). Avoid category (b). (Medium)
 - Apple 1.4.1 scrutinizes accuracy claims and expects doctor reminders. (High) [24]
 
 ### 3.2 EU MDR
@@ -107,7 +107,7 @@ See `prohibited_claims` in params.json. FTC Act §5 also requires substantiation
 - Practical approach: one high-water-mark consent model for all users, with no sale ever.
 
 ### 4.4 FTC HBNR
-- Final rule April 26, 2024, effective July 29, 2024. Covers health apps. A PHR has the capacity to draw from multiple sources, and the FTC's fitness-app example fits HealthRPG. (High) [45][46][47]
+- Final rule April 26, 2024, effective July 29, 2024. Covers health apps. A PHR has the capacity to draw from multiple sources, and the FTC's fitness-app example fits Me RPG. (High) [45][46][47]
 - Breach includes unauthorized disclosure. Notify within 60 days, with FTC notice at the same time for 500+ affected. Email plus text, in-app, or banner notice. (High) [45][46]
 - Civil penalty up to $53,088 per violation (2025). (High) [48]
 

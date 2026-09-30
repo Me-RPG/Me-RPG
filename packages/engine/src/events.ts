@@ -1,5 +1,5 @@
-import type { ClassId } from "@healthrpg/content";
-import type { ActivityInput, Capacity } from "@healthrpg/fitness-model";
+import type { ClassId } from "@me-rpg/content";
+import type { ActivityInput, Capacity } from "@me-rpg/fitness-model";
 import type { QuestlineLength } from "./quests/types.js";
 
 /** Days since 1970-01-01 (UTC). The engine never reads the clock itself. */

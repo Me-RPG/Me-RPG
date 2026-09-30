@@ -4,9 +4,9 @@ import { fileURLToPath } from "node:url";
 export default defineConfig({
   resolve: {
     alias: {
-      "@healthrpg/engine": fileURLToPath(new URL("./packages/engine/src/index.ts", import.meta.url)),
-      "@healthrpg/fitness-model": fileURLToPath(new URL("./packages/fitness-model/src/index.ts", import.meta.url)),
-      "@healthrpg/content": fileURLToPath(new URL("./packages/content/src/index.ts", import.meta.url)),
+      "@me-rpg/engine": fileURLToPath(new URL("./packages/engine/src/index.ts", import.meta.url)),
+      "@me-rpg/fitness-model": fileURLToPath(new URL("./packages/fitness-model/src/index.ts", import.meta.url)),
+      "@me-rpg/content": fileURLToPath(new URL("./packages/content/src/index.ts", import.meta.url)),
     },
   },
   test: {

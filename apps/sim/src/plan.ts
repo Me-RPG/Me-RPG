@@ -2,7 +2,7 @@
 // Usage:
 //   npm run plan -- [templateId] [short|average|long] [novice|trained]
 //   npm run plan -- single:<archetypeId> [novice|trained]      (e.g. single:long_walk)
-import { replay, type GameEvent, type QuestlineLength } from "@healthrpg/engine";
+import { replay, type GameEvent, type QuestlineLength } from "@me-rpg/engine";
 
 const args = process.argv.slice(2);
 const target = args.find((a) => !["short", "average", "long", "novice", "trained"].includes(a)) ?? "dragon_of_ashpeak";

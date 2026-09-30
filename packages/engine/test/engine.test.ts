@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import fc from "fast-check";
-import { CAPACITIES, DEFAULT_PARAMS, type ActivityType } from "@healthrpg/fitness-model";
+import { CAPACITIES, DEFAULT_PARAMS, type ActivityType } from "@me-rpg/fitness-model";
 
 const ACTIVITY_TYPES = Object.keys(DEFAULT_PARAMS.activities);
 import {
@@ -11,7 +11,7 @@ import {
   reduce,
   replay,
   type GameEvent,
-} from "@healthrpg/engine";
+} from "@me-rpg/engine";
 
 const START = 20_000;
 const baseline = { aerobic: 32, muscular_strength: 15, muscular_endurance: 18, mobility: 12 };

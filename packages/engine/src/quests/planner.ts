@@ -1,5 +1,5 @@
-import type { ActDef, ActName, ArchetypeDef, ClassDef, ClassId, QuestlineTemplate, SlotRole } from "@healthrpg/content";
-import type { PlanWeekKind } from "@healthrpg/fitness-model";
+import type { ActDef, ActName, ArchetypeDef, ClassDef, ClassId, QuestlineTemplate, SlotRole } from "@me-rpg/content";
+import type { PlanWeekKind } from "@me-rpg/fitness-model";
 import type { EpochDay } from "../events.js";
 import { Rng } from "../rng.js";
 import type { EngineContext } from "../rules.js";

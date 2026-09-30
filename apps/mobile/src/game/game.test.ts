@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_CONTEXT as CTX, classLevel, reduce, replay, type GameState } from "@healthrpg/engine";
+import { DEFAULT_CONTEXT as CTX, classLevel, reduce, replay, type GameState } from "@me-rpg/engine";
 import { noticesBetween } from "./announce";
 import { classRows, maintenanceBoard, openQuestlines, skillRows, titleOf } from "./selectors";
 

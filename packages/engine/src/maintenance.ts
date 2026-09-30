@@ -1,4 +1,4 @@
-import type { MaintenanceBountyDef } from "@healthrpg/content";
+import type { MaintenanceBountyDef } from "@me-rpg/content";
 import type { EpochDay } from "./events.js";
 import type { ActivityRecord } from "./quests/history.js";
 import type { EngineContext } from "./rules.js";

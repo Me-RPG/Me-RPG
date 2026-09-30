@@ -1,10 +1,29 @@
-import type { GameEvent } from "@healthrpg/engine";
+import type { GameEvent } from "@me-rpg/engine";
 import { UNLINKED, type EventStore, type SyncMeta } from "./storage.types";
 
-/** Web event store (browser preview only): the same append-only log, in localStorage. */
-const KEY = "healthrpg.events.v1";
-const RULES = "healthrpg.rules.v1";
-const SYNC = "healthrpg.sync.v1";
+/** Web event store: the same append-only log, in localStorage. */
+const KEY = "merpg.events.v1";
+const RULES = "merpg.rules.v1";
+const SYNC = "merpg.sync.v1";
+
+/** Keys from before the rename to Me RPG, moved once so existing saves keep loading. */
+const LEGACY_KEYS: [string, string][] = [["healthrpg.events.v1", KEY], ["healthrpg.rules.v1", RULES], ["healthrpg.sync.v1", SYNC]];
+
+function migrateLegacyKeys() {
+  try {
+    const ls = globalThis.localStorage;
+    if (!ls) return;
+    for (const [old, key] of LEGACY_KEYS) {
+      const value = ls.getItem(old);
+      if (value === null || ls.getItem(key) !== null) continue;
+      ls.setItem(key, value);
+      ls.removeItem(old);
+    }
+  } catch {
+    // Storage blocked: nothing to move.
+  }
+}
+migrateLegacyKeys();
 
 function read(): GameEvent[] {
   try {

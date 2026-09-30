@@ -1,6 +1,6 @@
 {
   "version": "0.1.0-unreviewed",
-  "notes": "Uncertain numbers are {low, mid, high, sources}. Source keys refer to the citation list in report.md. 'design' means HealthRPG heuristic, not a published value.",
+  "notes": "Uncertain numbers are {low, mid, high, sources}. Source keys refer to the citation list in report.md. 'design' means Me RPG heuristic, not a published value.",
   "units": { "distance": "m or km as named", "elevation": "m", "speed": "km/h", "vo2": "mL/kg/min", "energy": "J/kg (net)", "load": "MET-min (gross)" },
 
   "formulas": {

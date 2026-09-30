@@ -1,5 +1,5 @@
-import type { Family } from "@healthrpg/content";
-import type { ActivityType, FitnessParams } from "@healthrpg/fitness-model";
+import type { Family } from "@me-rpg/content";
+import type { ActivityType, FitnessParams } from "@me-rpg/fitness-model";
 import type { EpochDay } from "../events.js";
 import type { PlayerLevel } from "./types.js";
 

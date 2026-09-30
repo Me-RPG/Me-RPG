@@ -1,4 +1,4 @@
-import type { CapacityParams } from "@healthrpg/fitness-model";
+import type { CapacityParams } from "@me-rpg/fitness-model";
 import type { EpochDay } from "./events.js";
 
 /**

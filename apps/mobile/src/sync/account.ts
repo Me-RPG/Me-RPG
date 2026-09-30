@@ -2,7 +2,7 @@ import { AppState } from "react-native";
 import { randomUUID } from "expo-crypto";
 import { create } from "zustand";
 import type { Session } from "@supabase/supabase-js";
-import { DEFAULT_CONTEXT as CTX, type GameEvent } from "@healthrpg/engine";
+import { DEFAULT_CONTEXT as CTX, type GameEvent } from "@me-rpg/engine";
 import { eventStore } from "../game/storage";
 import { UNLINKED, type SyncMeta } from "../game/storage.types";
 import { RULES_VERSION, useGame } from "../game/store";
@@ -290,7 +290,7 @@ export const useAccount = create<AccountStore>((set, get) => ({
       const server = await exportAccount(db, session.user);
       const device = { rules: RULES_VERSION, sync: get().meta, events: useGame.getState().events };
       const json = JSON.stringify({ exportedAt: new Date().toISOString(), ...server, device }, null, 2);
-      await saveExport(`healthrpg-export-${new Date().toISOString().slice(0, 10)}.json`, json);
+      await saveExport(`me-rpg-export-${new Date().toISOString().slice(0, 10)}.json`, json);
     } catch (e) {
       set({ message: describe(e) });
     } finally {

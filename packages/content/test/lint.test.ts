@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_PARAMS } from "@healthrpg/fitness-model";
-import { DEFAULT_CONTENT, lintContent } from "@healthrpg/content";
+import { DEFAULT_PARAMS } from "@me-rpg/fitness-model";
+import { DEFAULT_CONTENT, lintContent } from "@me-rpg/content";
 
 describe("content lint", () => {
   it("shipped content passes every cohesion check", () => {

@@ -1,5 +1,5 @@
-import { DEFAULT_CONTENT, type ContentRegistry } from "@healthrpg/content";
-import { DEFAULT_PARAMS, type FitnessParams } from "@healthrpg/fitness-model";
+import { DEFAULT_CONTENT, type ContentRegistry } from "@me-rpg/content";
+import { DEFAULT_PARAMS, type FitnessParams } from "@me-rpg/fitness-model";
 
 /** Game-design knobs (not physiology). Physiology lives in FitnessParams. */
 export interface GameRules {

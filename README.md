@@ -1,4 +1,4 @@
-# HealthRPG
+# Me RPG
 
 A medieval RPG where the gameplay is your real health and fitness. The full engineering plan is in [docs/ENGINEERING_PLAN.md](docs/ENGINEERING_PLAN.md). Current state, decisions and next steps are in [docs/HANDOFF.md](docs/HANDOFF.md).
 

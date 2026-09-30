@@ -1,4 +1,4 @@
-import type { GameEvent } from "@healthrpg/engine";
+import type { GameEvent } from "@me-rpg/engine";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
 /** Server calls for sync (tables and functions in supabase/migrations). */

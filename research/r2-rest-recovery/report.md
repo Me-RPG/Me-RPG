@@ -1,4 +1,4 @@
-# R2: Rest & Recovery Norms for HealthRPG
+# R2: Rest & Recovery Norms for Me RPG
 
 Version 0.1.0-unreviewed. Researched 2026-09-28. Companion file: `params.json`.
 

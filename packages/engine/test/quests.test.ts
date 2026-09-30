@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import fc from "fast-check";
-import { DEFAULT_CONTENT } from "@healthrpg/content";
-import { DEFAULT_PARAMS as P } from "@healthrpg/fitness-model";
+import { DEFAULT_CONTENT } from "@me-rpg/content";
+import { DEFAULT_PARAMS as P } from "@me-rpg/fitness-model";
 import {
   OPTION_LOAD_TOLERANCE,
   QUESTLINE_LENGTH_WEEKS,
@@ -14,7 +14,7 @@ import {
   type GameState,
   type QuestlineLength,
   type QuestlineState,
-} from "@healthrpg/engine";
+} from "@me-rpg/engine";
 
 const START = 20_700;
 const TEMPLATES = Object.keys(DEFAULT_CONTENT.questlines);

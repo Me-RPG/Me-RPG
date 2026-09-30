@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_CONTEXT as CTX, hashState, replay, type GameEvent } from "@healthrpg/engine";
+import { DEFAULT_CONTEXT as CTX, hashState, replay, type GameEvent } from "@me-rpg/engine";
 import { planSync } from "./plan";
 
 const START = 20_700;

@@ -1,5 +1,5 @@
 # Camp: rest, enter and leave the Sanctuary.
-appId: com.healthrpg.app
+appId: com.merpg.app
 ---
 - launchApp
 - tapOn: "Camp"

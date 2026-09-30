@@ -1,5 +1,5 @@
-import { CLASS_XP_SCALE, classAffinity, type ClassId } from "@healthrpg/content";
-import { intensity, type ActivityInput } from "@healthrpg/fitness-model";
+import { CLASS_XP_SCALE, classAffinity, type ClassId } from "@me-rpg/content";
+import { intensity, type ActivityInput } from "@me-rpg/fitness-model";
 import type { EpochDay } from "./events.js";
 import type { EngineContext } from "./rules.js";
 import type { SkillState } from "./skills.js";

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ScrollView, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
-import { DEFAULT_CONTEXT as CTX, availableActions, epilogue, incomingWarning } from "@healthrpg/engine";
+import { DEFAULT_CONTEXT as CTX, availableActions, epilogue, incomingWarning } from "@me-rpg/engine";
 import { useGame } from "../../game/store";
 import { GameAsset } from "../../ui/GameAsset";
 import { Body, Button, Card, Label, Meter, Row, Screen, Title } from "../../ui/components";

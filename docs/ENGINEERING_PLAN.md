@@ -1,4 +1,4 @@
-# HealthRPG: Engineering Plan
+# Me RPG: Engineering Plan
 
 ## Context
 This is a new build (the `Desktop\HealthRPG` folder is empty). The product is a mobile app that looks and feels like a medieval RPG, where the real gameplay is the player's own health and fitness progress. Players set goals and get **questlines**: consecutive quests, each one step harder, that train them for a narrative climax such as slaying a dragon. Each quest offers a few concrete **options** (for example, a specific lifting routine or a specific trail), and completing any one of them completes the quest. A short narrative closes each quest. A boss battle closes each questline, and the player always wins it if they did the fitness work. Stats atrophy at realistic human rates but never penalize normal rest.
@@ -18,7 +18,7 @@ This is a new build (the `Desktop\HealthRPG` folder is empty). The product is a 
 
 ## Repository layout (pnpm workspaces + Turborepo)
 ```
-HealthRPG/
+Me-RPG/
   apps/
     mobile/            Expo app (expo-router, dev client)
     sim/               Node CLI: text-game REPL + balance simulator

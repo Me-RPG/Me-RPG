@@ -125,7 +125,7 @@ export function renderReport(r: ReportInput): string {
   const atrophyTable = `<table><thead><tr><th>Capacity</th>${[1, 2, 4, 8, 12].map((w) => `<th>wk ${w}: engine / R1 (low-high)</th>`).join("")}</tr></thead><tbody>${["aerobic", "muscular_strength", "muscular_endurance", "mobility"].map((c) => `<tr><td>${c}</td>${[1, 2, 4, 8, 12].map((w) => { const a = r.atrophy.find((x) => x.capacity === c && x.week === w)!; return `<td>${a.engineLossPct}% / ${a.r1Mid}% (${a.r1Low}-${a.r1High})</td>`; }).join("")}</tr>`).join("")}</tbody></table>`;
 
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HealthRPG Balance Report</title>
+<title>Me RPG Balance Report</title>
 <style>
 .viz-root{color-scheme:light;--surface-1:#fcfcfb;--surface-2:#f3f2ef;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#7a7975;--grid:#e6e5e1;--axis:#bdbcb7;--s1:#2a78d6;--s2:#eb6834;--g1:#86b6ef;--g2:#2a78d6;--g3:#104281;--g-ink1:#0b0b0b;--g-ink2:#ffffff;--good:#0ca30c;--bad:#d03b3b}
 @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--surface-1:#1a1a19;--surface-2:#242422;--text-primary:#ffffff;--text-secondary:#c3c2b7;--text-muted:#9a998f;--grid:#2e2e2b;--axis:#4a4a46;--s1:#3987e5;--s2:#d95926;--g1:#184f95;--g2:#3987e5;--g3:#9ec5f4;--g-ink1:#ffffff;--g-ink2:#0b0b0b}}
@@ -151,7 +151,7 @@ table{border-collapse:collapse;width:100%;font-size:12.5px;margin:8px 0}th,td{te
 .scroll{overflow-x:auto}#tip{position:fixed;pointer-events:none;background:var(--text-primary);color:var(--surface-1);font-size:12px;padding:4px 8px;border-radius:6px;opacity:0;transition:opacity .08s;z-index:9}
 code{font-size:12px;background:var(--surface-2);padding:1px 4px;border-radius:4px}
 </style></head><body><div class="viz-root">
-<h1>HealthRPG Balance Report</h1>
+<h1>Me RPG Balance Report</h1>
 <p class="lede">Deterministic simulation through the real engine. Parameters <code>${esc(r.params.version)}</code>. Eight synthetic players over 52 weeks, a 12-week-train-then-stop atrophy test against R1, and ${Object.values(s.battle).reduce((a, b) => a + b.n, 0)} Monte Carlo boss fights.</p>
 <div class="tiles">
 ${tile("Spike-cap violations", String(s.checks.spikeCapViolations), s.checks.spikeCapViolations === 0, `${s.checks.questsOffered} quests checked`)}

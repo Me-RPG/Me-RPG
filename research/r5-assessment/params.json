@@ -510,7 +510,7 @@
         "rule": "median of latest 3 device estimates within 42 days",
         "se": {"low": 5.0, "mid": 7.0, "high": 9.0, "sources": ["molina_garcia_2022", "lambe_2025", "lambe_2026"]},
         "apple_bias_adjustment": {"low": 0.0, "mid": 3.0, "high": 6.0, "sources": ["lambe_2025", "lambe_2026"], "note": "Apple underestimated by ~6 in two small studies; mid applies half; review"},
-        "note": "Apple uses user's own profile weight internally; HealthRPG receives only the VO2max value"
+        "note": "Apple uses user's own profile weight internally; Me RPG receives only the VO2max value"
       },
       {
         "method": "pace_hr_regression",
@@ -638,7 +638,7 @@
     "acog_804": "ACOG Committee Opinion No. 804. Obstet Gynecol 2020;135(4):e178-88 (not re-retrieved).",
     "mottola_2018": "Mottola MF et al. 2019 Canadian guideline for physical activity throughout pregnancy. Br J Sports Med 2018;52(21):1339-46 (not re-retrieved).",
     "topend_nonexercise": "Topend Sports. Non-exercise fitness test. https://www.topendsports.com/testing/tests/non-exercise.htm (secondary)",
-    "design": "HealthRPG design judgement (this report); requires validation",
+    "design": "Me RPG design judgement (this report); requires validation",
     "derived": "Computed in this report from cited source data"
   }
 }

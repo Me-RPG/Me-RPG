@@ -1,4 +1,4 @@
-import { reduce, replay, type EngineContext, type GameEvent } from "@healthrpg/engine";
+import { reduce, replay, type EngineContext, type GameEvent } from "@me-rpg/engine";
 
 /**
  * What one sync round should do, decided from the local log, the seq the server

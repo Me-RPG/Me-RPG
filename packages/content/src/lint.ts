@@ -1,4 +1,4 @@
-import type { FitnessParams } from "@healthrpg/fitness-model";
+import type { FitnessParams } from "@me-rpg/fitness-model";
 import type { ContentRegistry, QuestlineTemplate } from "./types.js";
 
 /**

@@ -1,5 +1,5 @@
 # Logging a 30-minute walk completes this week's "Keep the Road" upkeep.
-appId: com.healthrpg.app
+appId: com.merpg.app
 ---
 - launchApp
 - tapOn:

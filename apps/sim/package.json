@@ -1,11 +1,11 @@
 {
-  "name": "@healthrpg/sim",
+  "name": "@me-rpg/sim",
   "version": "0.0.1",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@healthrpg/content": "*",
-    "@healthrpg/engine": "*",
-    "@healthrpg/fitness-model": "*"
+    "@me-rpg/content": "*",
+    "@me-rpg/engine": "*",
+    "@me-rpg/fitness-model": "*"
   }
 }

@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "HealthRPG",
-    "slug": "healthrpg",
+    "name": "Me RPG",
+    "slug": "me-rpg",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.healthrpg.app"
+      "bundleIdentifier": "com.merpg.app"
     },
     "android": {
       "adaptiveIcon": {
@@ -18,14 +18,14 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.healthrpg.app"
+      "package": "com.merpg.app"
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro",
       "output": "single"
     },
-    "scheme": "healthrpg",
+    "scheme": "merpg",
     "experiments": {
       "typedRoutes": true
     },

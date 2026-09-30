@@ -8,7 +8,7 @@ import {
   replay,
   type GameEvent,
   type GameState,
-} from "@healthrpg/engine";
+} from "@me-rpg/engine";
 import { noticesBetween, type Notice } from "./announce";
 import { eventStore } from "./storage";
 
