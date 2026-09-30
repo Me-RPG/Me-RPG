@@ -1,4 +1,4 @@
-import { DEFAULT_CONTEXT as CTX, questStory, type GameState } from "@healthrpg/engine";
+import { DEFAULT_CONTEXT as CTX, questStory, type GameState } from "@me-rpg/engine";
 
 /** Something the player should see after an action: a story, a milestone, an unlock. */
 export interface Notice {

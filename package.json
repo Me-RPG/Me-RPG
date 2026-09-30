@@ -1,5 +1,5 @@
 {
-  "name": "healthrpg",
+  "name": "me-rpg",
   "private": true,
   "version": "0.0.1",
   "workspaces": [
@@ -9,14 +9,14 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc -p tsconfig.json --noEmit && npm run typecheck -w @healthrpg/mobile",
+    "typecheck": "tsc -p tsconfig.json --noEmit && npm run typecheck -w @me-rpg/mobile",
     "lint": "eslint packages apps",
     "params": "node scripts/build-params.mjs",
     "plan": "tsx apps/sim/src/plan.ts",
     "play": "tsx apps/sim/src/play.ts",
     "balance": "tsx apps/sim/src/balance.ts",
-    "mobile": "npm run start -w @healthrpg/mobile",
-    "mobile:web": "npm run web -w @healthrpg/mobile"
+    "mobile": "npm run start -w @me-rpg/mobile",
+    "mobile:web": "npm run web -w @me-rpg/mobile"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

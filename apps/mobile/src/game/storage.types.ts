@@ -1,4 +1,4 @@
-import type { GameEvent } from "@healthrpg/engine";
+import type { GameEvent } from "@me-rpg/engine";
 
 /** How this device's save relates to the server copy (see src/sync). */
 export interface SyncMeta {

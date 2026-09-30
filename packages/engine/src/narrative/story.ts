@@ -1,4 +1,4 @@
-import type { ActDef, Grammar } from "@healthrpg/content";
+import type { ActDef, Grammar } from "@me-rpg/content";
 import { Rng } from "../rng.js";
 import type { EngineContext } from "../rules.js";
 import type { GameState } from "../state.js";

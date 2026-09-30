@@ -1,4 +1,4 @@
-import type { Grammar } from "@healthrpg/content";
+import type { Grammar } from "@me-rpg/content";
 import { Rng } from "../rng.js";
 
 const MAX_DEPTH = 8;

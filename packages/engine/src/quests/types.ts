@@ -1,5 +1,5 @@
-import type { ActName, ClassId, Family, RoutineDef, SlotRole } from "@healthrpg/content";
-import type { ActivityType, PlanWeekKind } from "@healthrpg/fitness-model";
+import type { ActName, ClassId, Family, RoutineDef, SlotRole } from "@me-rpg/content";
+import type { ActivityType, PlanWeekKind } from "@me-rpg/fitness-model";
 import type { BattleState } from "../battle/battle.js";
 import type { EpochDay } from "../events.js";
 

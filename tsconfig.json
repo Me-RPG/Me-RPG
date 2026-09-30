@@ -3,13 +3,13 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@healthrpg/engine": [
+      "@me-rpg/engine": [
         "packages/engine/src/index.ts"
       ],
-      "@healthrpg/fitness-model": [
+      "@me-rpg/fitness-model": [
         "packages/fitness-model/src/index.ts"
       ],
-      "@healthrpg/content": [
+      "@me-rpg/content": [
         "packages/content/src/index.ts"
       ]
     }

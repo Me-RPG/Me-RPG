@@ -4,7 +4,7 @@ Status: 0.1.0-unreviewed. Companion file: params.json.
 Confidence levels:
 - **High**: read directly from the primary source or the official page.
 - **Medium**: a reputable secondary source, or interpretation needed.
-- **Low**: a HealthRPG design heuristic or our own derivation.
+- **Low**: a Me RPG design heuristic or our own derivation.
 
 ## 1. Exact formulas
 
@@ -16,7 +16,7 @@ The park's wording: "Elevation Gain x 2 x distance (in miles). The product's squ
 
 The park calls the formula "imperfect". Dark Hollow Falls scores 36.3 but is rated Moderate because it is steep over a short distance.
 
-Limitations (Low): the formula ignores descent, surface, altitude and technique, and flat trails score 0. HealthRPG adds a steepness bump and a duration floor to compensate.
+Limitations (Low): the formula ignores descent, surface, altitude and technique, and flat trails score 0. Me RPG adds a steepness bump and a duration floor to compensate.
 
 ### 1.2 Naismith and its variants
 - **Naismith 1892** (High for the rule; Medium for the citation chain, [2]): t_h = km/5 + gain_m/600.

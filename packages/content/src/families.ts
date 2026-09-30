@@ -1,4 +1,4 @@
-import type { ActivityType } from "@healthrpg/fitness-model";
+import type { ActivityType } from "@me-rpg/fitness-model";
 import type { Family } from "./types.js";
 
 const FAMILY: Record<string, Family> = {

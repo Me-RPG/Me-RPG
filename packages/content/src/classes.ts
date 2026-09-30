@@ -1,4 +1,4 @@
-import type { Capacity } from "@healthrpg/fitness-model";
+import type { Capacity } from "@me-rpg/fitness-model";
 
 /**
  * Classes follow fitness styles, not a definition of "healthy". They are

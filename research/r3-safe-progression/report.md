@@ -1,4 +1,4 @@
-# R3: Safe Progression Rates for HealthRPG Questlines
+# R3: Safe Progression Rates for Me RPG Questlines
 
 **Status:** v0.1.0-unreviewed. Research synthesis for engine design, not medical advice. A qualified exercise professional should review it before the numbers ship.
 **Date:** 2026-09-28

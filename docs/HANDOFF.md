@@ -1,10 +1,10 @@
-# HealthRPG: Handoff (state as of 2026-09-29)
+# Me RPG: Handoff (state as of 2026-09-29)
 
 Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](ENGINEERING_PLAN.md). This file records what was actually built, what was decided along the way, and what is next.
 
 **Location:** `%USERPROFILE%\OneDrive\Documents\Projects\HealthRPG` (not Desktop\HealthRPG, which is an empty launch folder).
 **Git:** branch `main`, remote `origin` = public repo https://github.com/Me-RPG/Me-RPG (no license: all rights reserved). The org belongs to the `cdchandev` GitHub account, not `cameronablaze`. The author is set in the repo config (Cameron). Commit and push only when the user asks.
-**Health:** 82 tests pass (`npm test`); `npm run typecheck` and `npm run lint` are clean; `expo-doctor` passes 21/21.
+**Health:** 84 tests pass (`npm test`); `npm run typecheck` and `npm run lint` are clean; `expo-doctor` passes 21/21.
 
 ---
 
@@ -72,7 +72,14 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 ## 3. Decisions made (don't re-litigate)
 - **Stack:** Expo/React Native, Supabase, npm workspaces (pnpm is not installed).
 - **Platforms (2026-09-29): ship Android and Web first. iOS is postponed**, along with HealthKit, Sign in with Apple and the Apple Developer account. Keep code cross-platform, but don't build or test for iOS yet.
-- **Name (2026-09-29): the project is renamed "Me RPG"** to fit the planned shift beyond fitness to personal improvement in general (see Future). The code, packages and docs still say HealthRPG until a rename pass is done.
+- **Name (2026-09-29): the project is renamed "Me RPG"** to fit the planned shift beyond fitness to personal improvement in general (see Future). Renamed throughout:
+  - display name "Me RPG";
+  - npm scope `@me-rpg/*`, Expo slug `me-rpg`, deep-link scheme `merpg://`;
+  - Android package and iOS bundle id `com.merpg.app`;
+  - web storage keys `merpg.*.v1`, which move the old `healthrpg.*` keys once;
+  - native database `merpg.db`, safe because no native install existed.
+
+  Only the local folder (`Projects\HealthRPG`) and the Supabase project's dashboard name keep the old name.
 - **User communications are postponed (2026-09-29):** no custom SMTP, branded emails or other player messaging yet. Sign-in keeps the email one-time code, sent through Supabase's built-in mailer, for development only.
 - **v1 scope:**
   - **No onboarding safety screen** (a v2 feature).
@@ -96,7 +103,7 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 - **Mobile:**
   - native Android not yet run (iOS postponed);
   - Maestro flows (`apps/mobile/.maestro/`) not yet run;
-  - placeholder Android package `com.healthrpg.app`;
+  - Android package `com.merpg.app` (chosen 2026-09-29; permanent once published on Google Play);
   - the "Prototype tools" in the Camp tab (time skip, reset) must be removed before release.
 - **Android builds:** Health Connect needs a development build, not Expo Go. This machine has no Android SDK, Android Studio or Java (checked 2026-09-29). There are two routes:
   - install Android Studio, which provides the SDK, JDK and an emulator (Health Connect is built into Android 14+ images);

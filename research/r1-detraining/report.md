@@ -1,4 +1,4 @@
-# R1 — Detraining Physiology: Evidence Review for the HealthRPG Capacity Engine
+# R1 — Detraining Physiology: Evidence Review for the Me RPG Capacity Engine
 
 Version: 0.1.0-unreviewed · Compiled 2026-09-28 · Status: research draft, not yet peer-checked by a human
 

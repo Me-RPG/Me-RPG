@@ -7,5 +7,5 @@ export async function saveExport(name: string, json: string): Promise<void> {
   file.create({ overwrite: true });
   file.write(json);
   if (!(await Sharing.isAvailableAsync())) throw new Error("Sharing isn't available on this device.");
-  await Sharing.shareAsync(file.uri, { mimeType: "application/json", UTI: "public.json", dialogTitle: "Your HealthRPG data" });
+  await Sharing.shareAsync(file.uri, { mimeType: "application/json", UTI: "public.json", dialogTitle: "Your Me RPG data" });
 }

@@ -1,4 +1,4 @@
-// HealthRPG text prototype. Everything the game does goes through the engine's
+// Me RPG text prototype. Everything the game does goes through the engine's
 // event log; the save file IS that log, replayed on load.
 //
 // Usage:  npm run play                 (save: outputs/saves/hero.json)
@@ -26,8 +26,8 @@ import {
   type GameState,
   type QuestlineLength,
   type QuestlineState,
-} from "@healthrpg/engine";
-import { baselineFromOnboarding, type AgeBand, type OnboardingAnswers, type SexForNorms } from "@healthrpg/fitness-model";
+} from "@me-rpg/engine";
+import { baselineFromOnboarding, type AgeBand, type OnboardingAnswers, type SexForNorms } from "@me-rpg/fitness-model";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 const saveName = (() => {

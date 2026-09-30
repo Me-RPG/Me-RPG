@@ -1,11 +1,11 @@
 {
-  "name": "@healthrpg/engine",
+  "name": "@me-rpg/engine",
   "version": "0.0.1",
   "private": true,
   "type": "module",
   "main": "src/index.ts",
   "dependencies": {
-    "@healthrpg/content": "*",
-    "@healthrpg/fitness-model": "*"
+    "@me-rpg/content": "*",
+    "@me-rpg/fitness-model": "*"
   }
 }

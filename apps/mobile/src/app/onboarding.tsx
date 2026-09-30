@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TextInput, StyleSheet } from "react-native";
 import { router } from "expo-router";
-import { baselineFromOnboarding, type AgeBand, type SexForNorms } from "@healthrpg/fitness-model";
+import { baselineFromOnboarding, type AgeBand, type SexForNorms } from "@me-rpg/fitness-model";
 import { useGame } from "../game/store";
 import { useAccount } from "../sync/account";
 import { GameAsset } from "../ui/GameAsset";

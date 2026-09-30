@@ -1,4 +1,4 @@
-import type { BossAttack, BossDef, VictoryGrade } from "@healthrpg/content";
+import type { BossAttack, BossDef, VictoryGrade } from "@me-rpg/content";
 import { Rng } from "../rng.js";
 import type { EngineContext } from "../rules.js";
 import { potency } from "../skills.js";

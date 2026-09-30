@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CAPACITIES, DEFAULT_PARAMS as P, activityLoad, capacitySplit, durationForLoad, durationForMetMinutes, metMinutes } from "@healthrpg/fitness-model";
+import { CAPACITIES, DEFAULT_PARAMS as P, activityLoad, capacitySplit, durationForLoad, durationForMetMinutes, metMinutes } from "@me-rpg/fitness-model";
 
 describe("R4 load pipeline", () => {
   it("reproduces the R4 worked examples", () => {

@@ -362,7 +362,7 @@
       "formula": "x = min(1, 0.2 + 0.1 * RPE_cr10) for RPE_cr10 >= 1; x = 0 for RPE 0",
       "scale": "Foster modified CR-10 (0 rest, 1 very very easy, 2 easy, 3 moderate, 4 somewhat hard, 5 hard, 7 very hard, 10 maximal), asked about 30 min after the session",
       "calibration_anchors": "ACSM (Garber 2011): moderate = 40-59% HRR ~ RPE 12-13 (CR-10 ~3-4); vigorous = 60-89% HRR ~ RPE 14-17 (CR-10 ~5-7)",
-      "confidence": "low-moderate; this mapping is a HealthRPG design choice, not a published equation"
+      "confidence": "low-moderate; this mapping is a Me RPG design choice, not a published equation"
     },
     "session_rpe_raw": {
       "formula": "sRPE_AU = RPE_cr10 * D_min",

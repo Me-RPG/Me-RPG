@@ -1,4 +1,4 @@
-import { CAPACITIES, activityLoad, loadByCapacity, type ActivityInput, type Capacity } from "@healthrpg/fitness-model";
+import { CAPACITIES, activityLoad, loadByCapacity, type ActivityInput, type Capacity } from "@me-rpg/fitness-model";
 import { battleTurn, startBattle } from "./battle/battle.js";
 import { initialCapacity, stimulateCapacity, tickCapacity, type CapacityState } from "./capacity.js";
 import type { EpochDay, GameEvent } from "./events.js";

@@ -1,10 +1,10 @@
-# R4: Activity Normalization for the HealthRPG Load Engine
+# R4: Activity Normalization for the Me RPG Load Engine
 Status: 0.1.0-unreviewed. Research compiled 2026-09-28. Companion file: params.json (same folder).
 
 Confidence scale:
 - **High:** taken directly from a primary or authoritative source.
 - **Medium:** well established, but with known error bands or read from secondary summaries.
-- **Low:** a HealthRPG design choice or expert judgment with no direct published validation.
+- **Low:** a Me RPG design choice or expert judgment with no direct published validation.
 
 ## 1. MET values (2024 Adult Compendium). Confidence: High
 Source: Herrmann SD, Willis EA, Ainsworth BE, et al. J Sport Health Sci 2024;13(1):6-12, doi:10.1016/j.jshs.2023.10.010. Covers adults aged 19–59; 1 MET = 3.5 ml/kg/min. The update extracted 2,356 values from 701 papers, added 303 activities and revised 176.

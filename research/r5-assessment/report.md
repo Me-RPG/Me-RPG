@@ -1,4 +1,4 @@
-# R5: Low-Intrusion Fitness Assessment for HealthRPG Onboarding
+# R5: Low-Intrusion Fitness Assessment for Me RPG Onboarding
 
 **Status:** 0.1.0-unreviewed research draft (2026-09-28). This is not legal or medical advice. A clinician (for example an ACSM-certified clinical exercise physiologist or a sports-medicine physician) and legal counsel must review every safety rule and every piece of user-facing text before launch.
 **Companion file:** `params.json` in this folder. It uses the same section names.
@@ -9,7 +9,7 @@
 - **Low:** my own derivation or design judgement, or a value I could not verify. Treat these as placeholders.
 
 ## 0. Executive answer
-1. **Safety screen.** The PAR-Q+ is the international standard, but its owners allow free use only for individuals, professionals, non-commercial research and not-for-profits. A for-profit app needs written permission or a commercial licence, and the form may not be altered. HealthRPG has two options: (A) license the PAR-Q+ and embed it unmodified, or (B) ship a self-written, clinician-reviewed screen based on the published ACSM 2015 logic (current activity, known cardiovascular/metabolic/renal disease, signs or symptoms, desired intensity) plus the generic "delay" conditions. I recommend (B) for v1. A positive answer never blocks the game. It (i) recommends talking to a health professional, (ii) limits the player to light-to-moderate "Gentle Path" quests and hides maximal Trials, and (iii) lets the player confirm clearance later. The app never diagnoses. **Confidence: high** on licensing and ACSM facts; **medium** on the product policy.
+1. **Safety screen.** The PAR-Q+ is the international standard, but its owners allow free use only for individuals, professionals, non-commercial research and not-for-profits. A for-profit app needs written permission or a commercial licence, and the form may not be altered. Me RPG has two options: (A) license the PAR-Q+ and embed it unmodified, or (B) ship a self-written, clinician-reviewed screen based on the published ACSM 2015 logic (current activity, known cardiovascular/metabolic/renal disease, signs or symptoms, desired intensity) plus the generic "delay" conditions. I recommend (B) for v1. A positive answer never blocks the game. It (i) recommends talking to a health professional, (ii) limits the player to light-to-moderate "Gentle Path" quests and hides maximal Trials, and (iii) lets the player confirm clearance later. The app never diagnoses. **Confidence: high** on licensing and ACSM facts; **medium** on the product policy.
 2. **Shortest validated self-report.** Very short instruments exist: Milton's single item, the 2-item Exercise Vital Sign and the 2-item Stanford Brief Activity Survey. For fitness estimation, the best single question is a paraphrased **NASA/JSC Physical Activity Rating (PA-R, 0–7)**, because it plugs straight into Jackson 1990. All self-reports are weak. IPAQ-SF correlates about 0.3 with accelerometers and overestimates activity by about 84% on average. Use them as starting priors, not as truth. **High.**
 3. **Non-exercise VO2max.** Every validated adult model I found needs a body-size term (BMI, waist, %fat or weight). Jackson 1990 has R≈0.78 and SEE≈5.6–5.7. Wier 2006 has SEE≈4.9. Nes 2011 (HUNT) uses waist and resting HR, with SEE≈5.1–5.7. Jurca 2005 also needs BMI. **None works without body size as published.** Two workarounds keep body data out of our hands. One substitutes an average BMI for the player's age and sex, taken from the FRIEND cohort (about 24–29 kg/m²); this raises the error to about 7 mL·kg⁻¹·min⁻¹. The other is the Uth heart-rate ratio method, which needs only age and resting HR. Use both if resting HR is available from a wearable. **High** on the models; **low** on the imputation error, which is my own calculation.
 4. **At-home Trials.**
@@ -68,7 +68,7 @@ Source: Riebe et al., MSSE 2015;47(11):2473–9. **High** for the three factors,
   - symptoms → stop and seek clearance.
 - **Rationale in the abstract:** the old guidance produced excessive referrals; cardiac events are usually preceded by warning signs; and risk falls as fitness rises.
 
-### 1.4 Recommended HealthRPG screen (self-written, paraphrased)
+### 1.4 Recommended Me RPG screen (self-written, paraphrased)
 One multi-select screen: "Does any of these apply right now?" **Low**; needs clinician review.
 - **S1:** a doctor has told me I have a heart, blood-vessel, lung, kidney or metabolic condition.
 - **S2:** recent chest pain or pressure, fainting, unusual breathlessness, or dizziness with exertion.

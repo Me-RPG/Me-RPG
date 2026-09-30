@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import fc from "fast-check";
-import { DEFAULT_CONTENT } from "@healthrpg/content";
-import { estimateVo2max } from "@healthrpg/fitness-model";
+import { DEFAULT_CONTENT } from "@me-rpg/content";
+import { estimateVo2max } from "@me-rpg/fitness-model";
 import {
   BATTLE,
   DEFAULT_CONTEXT as CTX,
@@ -13,7 +13,7 @@ import {
   type GameEvent,
   type GameState,
   type QuestlineLength,
-} from "@healthrpg/engine";
+} from "@me-rpg/engine";
 
 const START = 20_700;
 const TEMPLATES = Object.keys(DEFAULT_CONTENT.questlines);
@@ -170,7 +170,7 @@ describe("persistent skills", () => {
   });
 
   it("an untrained skill dulls gently but never loses rank; one session restores it", async () => {
-    const { sharpness, SKILL_MIN_SHARPNESS } = await import("@healthrpg/engine");
+    const { sharpness, SKILL_MIN_SHARPNESS } = await import("@me-rpg/engine");
     let s = readyForBoss("wolves_of_greywood", "short", heroAt({ aerobic: 32, muscular_strength: 20, muscular_endurance: 20, mobility: 15 }));
     const rank = s.skills.shield_wall!.rank;
     s = reduce(s, { type: "DayTicked", seq: s.seq + 1, day: s.day + 60 });

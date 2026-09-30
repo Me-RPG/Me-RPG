@@ -1,4 +1,4 @@
-# R7 — Integration Landscape for HealthRPG
+# R7 — Integration Landscape for Me RPG
 **Status:** 0.1.0-unreviewed · **Research date:** 2026-09-28
 
 > **Caveats.** Everything here comes from official docs fetched on 2026-09-28 unless marked otherwise. Some pages were read through an automated summariser, so treat quotes as close paraphrases and re-read the source before any legal decision. Anything not confirmed is marked UNVERIFIED. This is not legal advice.

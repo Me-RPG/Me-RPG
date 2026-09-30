@@ -7,7 +7,7 @@ import {
   xpForClassLevel,
   type GameState,
   type QuestlineState,
-} from "@healthrpg/engine";
+} from "@me-rpg/engine";
 
 /** View models for screens. Pure functions of engine state, tested with vitest. */
 

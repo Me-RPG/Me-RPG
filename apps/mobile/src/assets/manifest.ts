@@ -34,7 +34,7 @@ export const ASSETS = {
   "quest.conditioning_session": e("quest", "The Gauntlet"),
   "quest.mobility_session": e("quest", "At the Shrine"),
   "scene.camp": e("scene", "The Inn at Camp"),
-  "ui.crest": e("ui", "HealthRPG"),
+  "ui.crest": e("ui", "Me RPG"),
 } as const satisfies Record<string, AssetEntry>;
 
 export type AssetId = keyof typeof ASSETS;

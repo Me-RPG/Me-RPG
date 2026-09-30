@@ -1,5 +1,5 @@
 import * as SQLite from "expo-sqlite";
-import type { GameEvent } from "@healthrpg/engine";
+import type { GameEvent } from "@me-rpg/engine";
 import { UNLINKED, type EventStore, type SyncMeta } from "./storage.types";
 
 /**
@@ -11,7 +11,7 @@ let dbPromise: Promise<SQLite.SQLiteDatabase> | null = null;
 
 function db(): Promise<SQLite.SQLiteDatabase> {
   if (!dbPromise) {
-    dbPromise = SQLite.openDatabaseAsync("healthrpg.db").then(async (d) => {
+    dbPromise = SQLite.openDatabaseAsync("merpg.db").then(async (d) => {
       await d.execAsync(`
         PRAGMA journal_mode = WAL;
         CREATE TABLE IF NOT EXISTS events (seq INTEGER PRIMARY KEY NOT NULL, body TEXT NOT NULL);

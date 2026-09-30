@@ -1,5 +1,5 @@
-import { scaledRoutine, type ArchetypeDef, type Family, type OptionTemplate } from "@healthrpg/content";
-import { activityLoad, durationForMetMinutes, metMinutes, type ActivityInput } from "@healthrpg/fitness-model";
+import { scaledRoutine, type ArchetypeDef, type Family, type OptionTemplate } from "@me-rpg/content";
+import { activityLoad, durationForMetMinutes, metMinutes, type ActivityInput } from "@me-rpg/fitness-model";
 import type { EpochDay } from "../events.js";
 import { Rng } from "../rng.js";
 import type { EngineContext } from "../rules.js";

@@ -7,8 +7,8 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { ClassId } from "@healthrpg/content";
-import { CAPACITIES, DEFAULT_PARAMS as P, type Capacity } from "@healthrpg/fitness-model";
+import type { ClassId } from "@me-rpg/content";
+import { CAPACITIES, DEFAULT_PARAMS as P, type Capacity } from "@me-rpg/fitness-model";
 import {
   BATTLE,
   DEFAULT_CONTEXT as CTX,
@@ -23,7 +23,7 @@ import {
   type GameState,
   type QuestlineLength,
   type QuestlineState,
-} from "@healthrpg/engine";
+} from "@me-rpg/engine";
 import { renderReport } from "./report.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");

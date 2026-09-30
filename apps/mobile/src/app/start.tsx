@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { View } from "react-native";
 import { router } from "expo-router";
-import type { ClassId } from "@healthrpg/content";
-import { DEFAULT_CONTEXT as CTX, QUESTLINE_LENGTH_WEEKS, type QuestlineLength } from "@healthrpg/engine";
+import type { ClassId } from "@me-rpg/content";
+import { DEFAULT_CONTEXT as CTX, QUESTLINE_LENGTH_WEEKS, type QuestlineLength } from "@me-rpg/engine";
 import { useGame } from "../game/store";
 import { GameAsset } from "../ui/GameAsset";
 import { Body, Button, Card, Chip, Label, Row, Screen, Title } from "../ui/components";

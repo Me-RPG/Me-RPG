@@ -1,7 +1,7 @@
 # Onboarding -> start a short questline -> complete the first quest -> read its story.
 # Run on a simulator or device with a development build installed:
 #   maestro test apps/mobile/.maestro
-appId: com.healthrpg.app
+appId: com.merpg.app
 ---
 - launchApp:
     clearState: true

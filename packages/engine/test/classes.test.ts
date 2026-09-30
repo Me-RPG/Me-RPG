@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import fc from "fast-check";
-import { DEFAULT_CONTENT, type ClassId } from "@healthrpg/content";
-import { DEFAULT_PARAMS as P } from "@healthrpg/fitness-model";
+import { DEFAULT_CONTENT, type ClassId } from "@me-rpg/content";
+import { DEFAULT_PARAMS as P } from "@me-rpg/fitness-model";
 import {
   BATTLE,
   DEFAULT_CONTEXT as CTX,
@@ -12,7 +12,7 @@ import {
   replay,
   type BattleState,
   type GameState,
-} from "@healthrpg/engine";
+} from "@me-rpg/engine";
 
 const START = 20_700;
 const CLASSES = Object.keys(DEFAULT_CONTENT.classes) as ClassId[];

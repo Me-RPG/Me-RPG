@@ -1,4 +1,4 @@
-# HealthRPG
+# Me RPG
 
 A medieval RPG that gamifies real fitness. **Start every session by reading [docs/HANDOFF.md](docs/HANDOFF.md)**, which covers current state, decisions, open items and the next phase. The original plan is in [docs/ENGINEERING_PLAN.md](docs/ENGINEERING_PLAN.md).
 
