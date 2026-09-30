@@ -20,7 +20,7 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 | Classes (added) | Done: Ranger / Berserker / Warrior | `packages/content/src/classes.ts`, `packages/engine/src/classes.ts` |
 | 5 Mobile shell | Done, **verified in the browser (Expo web) only** | `apps/mobile` |
 | **6 Accounts + sync (Supabase)** | **In progress.** App side built; migration written but **not yet applied**. See section 7 | `supabase/`, `apps/mobile/src/sync` |
-| 7 HealthKit / Health Connect | Not started | — |
+| 7 Health Connect (HealthKit postponed with iOS) | Not started. Needs an Android development build (see section 4) | — |
 | 8 Strava | Not started (heavy API restrictions, see R7) | — |
 | 9 Trails (OSM/Overpass; AllTrails not viable) | Not started | — |
 | 10 Art, audio, beta | Not started | — |
@@ -71,11 +71,13 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 
 ## 3. Decisions made (don't re-litigate)
 - **Stack:** Expo/React Native, Supabase, npm workspaces (pnpm is not installed).
+- **Platforms (2026-09-29): ship Android and Web first. iOS is postponed**, along with HealthKit, Sign in with Apple and the Apple Developer account. Keep code cross-platform, but don't build or test for iOS yet.
+- **User communications are postponed (2026-09-29):** no custom SMTP, branded emails or other player messaging yet. Sign-in keeps the email one-time code, sent through Supabase's built-in mailer, for development only.
 - **v1 scope:**
   - **No onboarding safety screen** (a v2 feature).
   - High-stakes battles; only long-term players should suspect they can't lose.
   - Classes by fitness style, non-exclusive.
-- **Integration order** (from R7): HealthKit/Health Connect → OSM trails → Mapy → Garmin → Google Health API → Strava (last; owner-only display, no AI use, 7-day cache).
+- **Integration order** (from R7): Health Connect (HealthKit later, with iOS) → OSM trails → Mapy → Garmin → Google Health API → Strava (last; owner-only display, no AI use, 7-day cache).
 - **Future:** a self-betterment expansion (study = a mage class), plus a monk class for mobility.
 - Params use the research **mid** values. The user will review later.
 
@@ -91,11 +93,17 @@ Read this first in a new session. The original plan is in [ENGINEERING_PLAN.md](
 - **Stuck questline:** a player who refuses one modality (e.g. no cardio) never progresses. A "swap quest" feature is needed.
 - **Save versioning:** rule changes can break replay of old saves. Saves record `RULES_VERSION`; there is no migration strategy yet.
 - **Mobile:**
-  - native iOS/Android not yet run;
+  - native Android not yet run (iOS postponed);
   - Maestro flows (`apps/mobile/.maestro/`) not yet run;
-  - placeholder bundle id `com.healthrpg.app`;
+  - placeholder Android package `com.healthrpg.app`;
   - the "Prototype tools" in the Camp tab (time skip, reset) must be removed before release.
-- **Health data:** HealthKit/Health Connect need a development build (not Expo Go).
+- **Android builds:** Health Connect needs a development build, not Expo Go. This machine has no Android SDK, Android Studio or Java (checked 2026-09-29). There are two routes:
+  - install Android Studio, which provides the SDK, JDK and an emulator (Health Connect is built into Android 14+ images);
+  - use EAS Build in the cloud, which needs an Expo account and a phone or emulator to install the APK on.
+- **Web is now a shipping platform, not only a preview:**
+  - `storage.web.ts` keeps the log in localStorage, which browsers can evict (Safari clears script storage after 7 days without a visit). Signing in keeps the save safe; consider IndexedDB plus `navigator.storage.persist()`.
+  - Web has no health platform, so web players log workouts manually.
+  - Hosting is not chosen yet (`app.json` web output is `single`).
 
 ## 5. Gotchas
 - **Metro and `.js` suffixes:** the shared packages use Node-style `.js` import suffixes. `apps/mobile/metro.config.js` maps them to `.ts`.
@@ -143,8 +151,8 @@ npm run mobile                                 # Expo dev server for device/simu
 - **Needs the user:**
   1. Apply the migration: `npx supabase login`, `npx supabase link --project-ref gebeanamnzbomxjrlvwh` (prompts for the DB password in their terminal), `npx supabase db push`. Alternatively, paste the SQL file into the dashboard SQL editor.
   2. Email templates (Authentication → Emails): add `{{ .Token }}` to **Magic Link** and **Confirm signup**. The app signs in with the code, not the link.
-  3. Built-in email only delivers to the project's team members and is rate-limited; set up custom SMTP before beta.
-  4. Still open: Apple sign-in (needs an Apple Developer account), Google (needs an OAuth client), the project region (EU eases GDPR). Redirect URLs are only needed once magic links or OAuth are added.
+  3. *Postponed (user communications):* custom SMTP. Built-in email only delivers to the project's team members and is rate-limited, which is fine for development but not for beta.
+  4. Still open: Google sign-in (needs an OAuth client; optional), the project region (EU eases GDPR). Sign in with Apple is postponed with iOS; Apple only requires it on iOS apps that offer other social logins. Redirect URLs are only needed once magic links or OAuth are added.
 - **Not done yet:**
   - `supabase/functions/replay-validate` (engine in Deno, recomputing the state hash) and `content_versions`, which it needs;
   - `connections` (provider tokens in Vault), to be added with the first integration;
